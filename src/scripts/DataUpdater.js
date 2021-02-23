@@ -11,7 +11,7 @@ class DataUpdater {
     }
 
     blocks: for(let y = 0; y < local.length; y++) {
-      if(local[y].image === null) continue blocks;
+      if(local[y].image === undefined || local[y].image === null) continue blocks;
       else if(local[y].image === "") continue blocks;
 
       for(let i = 0; i < storage.length; i++) {

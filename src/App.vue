@@ -5,6 +5,7 @@
 		<Statistics class="page" v-if="currentPage === 'statistics'" />
 		<BannersAndSliders class="page" v-else-if="currentPage === 'banners-sliders'" />
 		<Films class="page" v-else-if="currentPage === 'films'" />
+		<Cinemas class="page" v-else-if="currentPage === 'cinemas'" />
 	</div>
 </template>
 
@@ -14,6 +15,7 @@ import MainMenu from './components/MainMenu.vue';
 import Statistics from './components/Pages/Statistics.vue';
 import BannersAndSliders from './components/Pages/BannersAndSliders/BannersAndSliders.vue';
 import Films from './components/Pages/Films/Films.vue';
+import Cinemas from './components/Pages/Cinemas/Cinemas.vue';
 
 export default {
 	name: 'App',
@@ -32,7 +34,8 @@ export default {
 		MainMenu,
 		Statistics,
 		BannersAndSliders,
-		Films
+		Films,
+		Cinemas
 	}
 }
 </script>
