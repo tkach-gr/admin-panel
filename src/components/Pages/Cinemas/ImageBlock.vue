@@ -11,7 +11,7 @@
 import database from '@/scripts/database.js';
 
 export default {
-  name: 'CinemaMainImageBlock',
+  name: 'ImageBlock',
   props: ['sourceRef', 'image'],
   data() {
     return {
@@ -53,7 +53,6 @@ export default {
       this.$emit("imageChanged", null);
     },
     loadImage() {
-      console.log(this.imageSource);
       if(this.imageFile === undefined) {
         this.imageFile = null;
       }

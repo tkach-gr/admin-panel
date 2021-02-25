@@ -18,10 +18,9 @@ class InfoList {
   }
 
   deleteItem(list, deleteItem) {
-    console.log(list);
     const index = list.indexOf(deleteItem);
     if (index === -1) { return };
-    list.splice(list[index], 1);
+    list.splice(index, 1);
   }
 }
 

@@ -73,7 +73,7 @@ export default {
         film[lang].gallery.map(item => array.push({
           image: item.image,
           imageFile: item.imageFile,
-          changeImage: name => {item.image = name; console.log({item, name}) }
+          changeImage: name => item.image = name
         }));
       };
 

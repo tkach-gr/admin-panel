@@ -15,7 +15,7 @@
 import database from '@/scripts/database.js';
 
 export default {
-  name: 'CinemaEditGalleryItem',
+  name: 'GalleryItem',
   props: ['sourceRef', 'data'],
   data() {
     return {

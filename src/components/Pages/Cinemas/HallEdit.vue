@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Редактирование фильма</h3>
+      <h3 class="card-title">Редактирование кинотеатра</h3>
       <div class="card__menu btn-group">
         <div ref="ukrLang" @click="changeLang('ukr')" class="card__item btn btn-default selected">Украинский</div>
         <div ref="rusLang" @click="changeLang('rus')" class="card__item btn btn-default">Русский</div>
@@ -9,43 +9,27 @@
     </div>
     <div class="card-body">
       <div class="input-row">
-        <div class="input-row__label">Навание фильма </div>
-        <input v-model="edit[lang].name" type="text" class="form-control" placeholder="Название фильма">
+        <div class="input-row__label">Номер зала</div>
+        <input v-model="edit[lang].name" type="text" class="form-control" placeholder="Номер зала">
       </div>
       <div class="input-row">
-        <div class="input-row__label">Описание </div>
-        <textarea v-model="edit[lang].text" class="form-control" placeholder="Текст"></textarea>
+        <div class="input-row__label">Описание зала</div>
+        <textarea v-model="edit[lang].description" class="form-control" placeholder="Описание зала"></textarea>
       </div>
       <div class="input-row">
-        <div class="input-row__label">Главная картинка </div>
-        <FilmMainImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
-        <FilmMainImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
+        <div class="input-row__label">Cхема зала </div>
+        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].schemaImage" @imageChanged="changeSchemaImage" />
+        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].schemaImage" @imageChanged="changeSchemaImage" />
+      </div>
+      <div class="input-row">
+        <div class="input-row__label mt">Верхний баннера </div>
+        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].topBannerImage" @imageChanged="changeTopBannerImage" />
+        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].topBannerImage" @imageChanged="changeTopBannerImage" />
       </div>
       <div class="input-row gallery">
         <div class="input-row__label gallery__title">Галлерея картинок<br>Размер: 1000x190</div>
-        <FilmEditGallery v-if="lang === 'ukr'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
-        <FilmEditGallery v-else-if="lang === 'rus'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
-      </div>
-      <div class="input-row">
-        <div class="input-row__label">Ссылка на трейлер </div>
-        <input v-model="edit[lang].trailer" type="text" class="form-control" placeholder="Ссылка на видео в youtube">
-      </div>
-      <div class="input-row">
-        <div class="input-row__label">Тип кино </div>
-        <div class="checkbox-list">
-          <div class="checkbox-list__group">
-            <input v-model="edit[lang].has3d" id="film3dCheck" type="checkbox" class="form-control checkbox-list__input" placeholder="Ссылка на видео в youtube">
-            <label for="film3dCheck" class="checkbox-list__label">3D</label>
-          </div>
-          <div class="checkbox-list__group">
-            <input v-model="edit[lang].has2d" id="film2dCheck" type="checkbox" class="form-control checkbox-list__input" placeholder="Ссылка на видео в youtube">
-            <label for="film2dCheck" class="checkbox-list__label">2D</label>
-          </div>
-          <div class="checkbox-list__group">
-            <input v-model="edit[lang].hasImax" id="filmImaxCheck" type="checkbox" class="form-control checkbox-list__input" placeholder="Ссылка на видео в youtube">
-            <label for="filmImaxCheck" class="checkbox-list__label">IMAX</label>
-          </div>
-        </div>
+        <Gallery v-if="lang === 'ukr'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
+        <Gallery v-else-if="lang === 'rus'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
       </div>
       <div class="seo">
         <div class="seo__title">SEO блок </div>
@@ -71,37 +55,45 @@
     </div>
     <div class="controls">
       <button @click="save" class="btn btn-default btn-save">Сохранить</button>
-      <button @click="returnDefault" class="btn btn-default btn-return">Вернуть базовую версию</button>
     </div>
   </div>
 </template>
 
 <script>
-import FilmMainImageBlock from './FilmMainImageBlock.vue';
-import FilmEditGallery from './FilmEditGallery.vue';
+import ImageBlock from './ImageBlock.vue';
+import Gallery from './Gallery.vue';
 
 export default {
-  name: "FilmEdit",
-  props: ["sourceRef", "film"],
+  name: "HallEdit",
+  props: ["sourceRef", "hall"],
   components: {
-    FilmMainImageBlock,
-    FilmEditGallery
+    ImageBlock,
+    Gallery,
   },
   data() {
     return {
-      edit: JSON.parse(JSON.stringify(this.film)),
-      lang: "ukr"
+      edit: JSON.parse(JSON.stringify(this.hall)),
+      lang: "ukr",
     }
   },
   methods: {
-    changeMainImage(image, file = null) {
+    changeSchemaImage(image, file = null) {
       if(image !== null) {
-        this.edit[this.lang].mainImage = image;
+        this.edit[this.lang].schemaImage = image;
       } else {
-        this.edit[this.lang].mainImage = ""; 
+        this.edit[this.lang].schemaImage = ""; 
+      }
+
+      this.edit[this.lang].schemaImageFile = file;
+    },
+    changeTopBannerImage(image, file = null) {
+      if(image !== null) {
+        this.edit[this.lang].topBannerImage = image;
+      } else {
+        this.edit[this.lang].topBannerImage = ""; 
       }
       
-      this.edit[this.lang].mainImageFile = file;
+      this.edit[this.lang].topBannerImageFile = file;
     },
     changeLang(lang) {
       this.lang = lang;
@@ -112,10 +104,7 @@ export default {
       this.$refs[lang + "Lang"].classList.add("selected");
     },
     save() {
-      this.$emit("saveFilm", this.edit);
-    },
-    returnDefault() {
-      this.edit = this.film;
+      this.$emit("saveHall", this.edit);
     }
   },
   mounted() {
@@ -146,6 +135,10 @@ export default {
     display: flex;
     align-items: flex-start;
     margin-top: 15px;
+  }
+
+  .mt {
+    margin-top: 11px;
   }
 
   .gallery {

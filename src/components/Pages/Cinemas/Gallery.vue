@@ -1,6 +1,6 @@
 <template>
   <div class="gallery">
-    <CinemaEditGalleryItem :key="item" :sourceRef="sourceRef" :data="item"
+    <GalleryItem :key="item" :sourceRef="sourceRef" :data="item"
       v-on:remove="list.splice(index, 1)" v-for="(item, index) in list"
       class="card__block" />
     <button @click="addItem()" class="btn btn-default card__add-block">Добавить<br>фото</button>
@@ -9,26 +9,18 @@
 </template>
 
 <script>
-import CinemaEditGalleryItem from './CinemaEditGalleryItem.vue';
+import GalleryItem from './GalleryItem.vue';
 
 export default {
-  name: 'CinemaEditGallery',
+  name: 'Gallery',
   props: ["sourceRef", "list"],
   components: {
-    CinemaEditGalleryItem
+    GalleryItem
   },
   methods: {
     addItem() {
       this.list.push({});
     },
-    // updateBox(list) {
-    //   if(list !== null) {
-    //     this.list = list;
-    //   }
-    // }
-  },
-  created() {
-    // database.listenData(this.ref, this.updateBox.bind(this));
   }
 }
 </script>

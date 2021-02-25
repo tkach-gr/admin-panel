@@ -1,5 +1,6 @@
 <template>
-  <div class="card">
+  <div>
+  <div v-if="isEditHall === false" class="card">
     <div class="card-header">
       <h3 class="card-title">Редактирование кинотеатра</h3>
       <div class="card__menu btn-group">
@@ -22,18 +23,21 @@
       </div>
       <div class="input-row">
         <div class="input-row__label">Логотип </div>
-        <CinemaMainImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].logoImage" @imageChanged="changeLogoImage" />
-        <CinemaMainImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].logoImage" @imageChanged="changeLogoImage" />
+        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].logoImage" @imageChanged="changeLogoImage" />
+        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].logoImage" @imageChanged="changeLogoImage" />
       </div>
       <div class="input-row">
         <div class="input-row__label mt">Фото верхнего баннера </div>
-        <CinemaMainImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
-        <CinemaMainImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
+        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
+        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
       </div>
       <div class="input-row gallery">
         <div class="input-row__label gallery__title">Галлерея картинок<br>Размер: 1000x190</div>
-        <CinemaEditGallery v-if="lang === 'ukr'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
-        <CinemaEditGallery v-else-if="lang === 'rus'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
+        <Gallery v-if="lang === 'ukr'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
+        <Gallery v-else-if="lang === 'rus'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
+      </div>
+      <div class="input-row">
+        <DataTable :settings="hallsTableSettings" :list="edit.halls" :lang="lang" @addItem="addHall" @editItem="editHall" @deleteItem="deleteHall" />
       </div>
       <div class="seo">
         <div class="seo__title">SEO блок </div>
@@ -62,23 +66,43 @@
       <button @click="returnDefault" class="btn btn-default btn-return">Вернуть базовую версию</button>
     </div>
   </div>
+    <HallEdit v-if="isEditHall" :hall="editingHall" :sourceRef="sourceRef" @saveHall="saveHall" />
+  </div>
 </template>
 
 <script>
-import CinemaMainImageBlock from './CinemaMainImageBlock.vue';
-import CinemaEditGallery from './CinemaEditGallery.vue';
+import ImageBlock from './ImageBlock.vue';
+import Gallery from './Gallery.vue';
+import HallEdit from './HallEdit.vue';
+import DataTable from '@/components/DataTable.vue';
+import InfoList from '@/scripts/ListManager.js';
+
+let infoList = new InfoList();
 
 export default {
   name: "CinemaEdit",
   props: ["sourceRef", "cinema"],
   components: {
-    CinemaMainImageBlock,
-    CinemaEditGallery
+    ImageBlock,
+    Gallery,
+    HallEdit,
+    DataTable,
   },
   data() {
     return {
       edit: JSON.parse(JSON.stringify(this.cinema)),
-      lang: "ukr"
+      lang: "ukr",
+      isEditHall: false,
+      editingHall: {},
+      hallsTableSettings: {
+        title: "Список залов",
+        props: { 
+          name: "Название зала", 
+          creationDate: "Дата создания"
+        },
+        hasEdit: true,
+        hasDelete: true,
+      }
     }
   },
   methods: {
@@ -100,6 +124,23 @@ export default {
       
       this.edit[this.lang].mainImageFile = file;
     },
+    addHall() {
+      let hall = {
+        ukr: { name:"Новый зал(укр)", creationDate: this.currentDate },
+        rus: { name:"Новый зал(рус)", creationDate: this.currentDate },
+      };
+
+      if(this.edit.halls.length === 0) { hall.isDeletable = false; }
+
+      this.edit.halls.push(hall);
+    },
+    editHall(hall) {
+      this.editingHall = hall;
+      this.isEditHall = true;
+    },
+    deleteHall(hall) {
+      infoList.deleteItem(this.edit.halls, hall);
+    },
     changeLang(lang) {
       this.lang = lang;
 
@@ -108,6 +149,14 @@ export default {
 
       this.$refs[lang + "Lang"].classList.add("selected");
     },
+    saveHall(hall) {
+      this.isEditHall = false;
+      this.editingHall.ukr = hall.ukr;
+      this.editingHall.rus = hall.rus;
+
+      this.cinema.halls = this.edit.halls;
+      this.$emit("saveHall");
+    },
     save() {
       this.$emit("saveCinema", this.edit);
     },
@@ -115,9 +164,20 @@ export default {
       this.edit = this.cinema;
     }
   },
+  computed: {
+    currentDate() {
+      let date = new Date();
+      let month = date.getMonth();
+      month = month.toString().length === 1 ? "0" + month : month;
+
+      return `${date.getDate()}.${month}.${date.getFullYear()}`;
+    }
+  },
   mounted() {
     this.edit.rus.gallery = this.edit.rus.gallery || [];
     this.edit.ukr.gallery = this.edit.ukr.gallery || [];
+
+    this.edit.halls = this.edit.halls || [];
   }
 }
 </script>
@@ -171,7 +231,6 @@ export default {
   }
 
   .seo__body {
-    margin: 0 auto;
     width: 100%;
     max-width: 700px;
   }

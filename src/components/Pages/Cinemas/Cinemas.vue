@@ -1,7 +1,7 @@
 <template>
   <div class="cinemas">
-    <CinemasList ref="cinemasList" v-if="!isEditing" :cinemas="cinemas" :isLoading="isLoading" :sourceRef="ref" @addCinema="addCinema" @editCinema="editCinema" />
-    <CinemaEdit v-else-if="isEditing" :cinema="editingCinema" :sourceRef="ref" @saveCinema="saveCinema" />
+    <CinemasList ref="cinemasList" v-if="!isEditing" :cinemas="cinemas" :isLoading="isLoading" :sourceRef="ref" @addCinema="addCinema" @editCinema="editCinema" @deleteCinema="deleteCinema" />
+    <CinemaEdit v-else-if="isEditing" :cinema="editingCinema" :sourceRef="ref" @saveCinema="saveCinema" @saveHall="saveHall" />
   </div>
 </template>
 
@@ -10,6 +10,9 @@ import CinemasList from './CinemasList.vue';
 import CinemaEdit from './CinemaEdit.vue';
 import database from '@/scripts/database.js';
 import DataUpdader from '@/scripts/DataUpdater.js';
+import InfoList from '@/scripts/ListManager.js';
+
+let infoList = new InfoList();
 
 export default {
   name: 'Cinemas',
@@ -45,55 +48,60 @@ export default {
       this.editingCinema = cinema;
       this.isEditing = true;
     },
+    deleteCinema(cinema) {
+      infoList.deleteItem(this.cinemas.list, cinema);
+      this.save();
+    },
+    saveHall() {
+      this.save();
+    },
     saveCinema(cinema) {
       this.editingCinema.ukr = cinema.ukr;
       this.editingCinema.rus = cinema.rus;
+      this.editingCinema.halls = cinema.halls;
 
       this.isEditing = false;
-      console.log(this.cinemas);
       this.save();
     },
-    pushLogoImages(array) {
-      let logoImageIterator = (lang, item) => array.push({ 
-        image: item[lang].logoImage,
-        imageFile: item[lang].logoImageFile,
-        changeImage: name => item[lang].logoImage = name
-      });
+    pushInnerImages(source, containerKey, array, propName) {
+      if(source === undefined) return;
 
-      this.cinemas.list.map(item => logoImageIterator("rus", item));
-      this.cinemas.list.map(item => logoImageIterator("ukr", item));
-    },
-    pushMainImages(array) {
-      let mainImageIterator = (lang, item) => array.push({ 
-        image: item[lang].mainImage,
-        imageFile: item[lang].mainImageFile,
-        changeImage: name => item[lang].mainImage = name
-      });
+      let iterator = (lang, item) => {
+        if(item[lang][containerKey] === undefined) return;
 
-      this.cinemas.list.map(item => mainImageIterator("rus", item));
-      this.cinemas.list.map(item => mainImageIterator("ukr", item));
-    },
-    pushGalleryImages(array) {
-      let galleryIterator = (lang, cinema) => {
-        if(cinema[lang].gallery === undefined) return;
-
-        cinema[lang].gallery.map(item => array.push({
-          image: item.image,
-          imageFile: item.imageFile,
-          changeImage: name => item.image = name
+        item[lang].gallery.map(subitem => array.push({
+          image: subitem[propName],
+          imageFile: subitem[propName + "File"],
+          changeImage: name => subitem[propName] = name
         }));
       };
 
-      this.cinemas.list.map(item => galleryIterator("rus", item));
-      this.cinemas.list.map(item => galleryIterator("ukr", item));
+      source.map(item => iterator("rus", item));
+      source.map(item => iterator("ukr", item));
+    },
+    pushImages(source, array, propName) {
+      if(source === undefined) return;
+
+      let iterator = (lang, item) => array.push({ 
+        image: item[lang][propName],
+        imageFile: item[lang][propName + "File"],
+        changeImage: name => item[lang][propName] = name
+      });
+
+      source.map(item => iterator("rus", item));
+      source.map(item => iterator("ukr", item));
     },
     save() {
       let handle = list => {
         let images = [];
 
-        this.pushLogoImages(images);
-        this.pushMainImages(images);
-        this.pushGalleryImages(images);
+        this.pushImages(this.cinemas.list, images, "logoImage");
+        this.pushImages(this.cinemas.list, images, "mainImage");
+        this.pushInnerImages(this.cinemas.list, "gallery", images, "image");
+
+        this.cinemas.list.map(item => this.pushImages(item.halls, images, "schemaImage"));
+        this.cinemas.list.map(item => this.pushImages(item.halls, images, "topBannerImage"));
+        this.cinemas.list.map(item => this.pushInnerImages(item.halls, "gallery", images, "image"));
 
         DataUpdader.handleImagesByCallback(images, list, this.ref, () => this.cinemas.imagesCounter++);
 

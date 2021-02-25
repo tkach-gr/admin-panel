@@ -4,7 +4,7 @@
         <h3 class="card-title">Список кинотеатров</h3>
       </div>
       <div class="card-body">
-        <CinemaBlock :key="item" :cinema="item" :sourceRef="sourceRef" v-for="item in cinemas.list" @click="$emit('editCinema', item)" class="card-block card-body__item" />
+        <CinemaBlock :key="item" :cinema="item" :index="index" :sourceRef="sourceRef" v-for="(item, index) in cinemas.list" @editCinema="$emit('editCinema', item)" @delete="deleteCinema(item)" class="card-block card-body__item" />
         <button @click="$emit('addCinema', 'current')" class="btn btn-default card__add-block card-body__item">
           Добавить<br>кинотеатр
         </button>
@@ -20,10 +20,15 @@ import CinemaBlock from './CinemaBlock.vue';
 
 export default {
   name: 'CinemasList',
+  props: ["cinemas", "sourceRef", "isLoading"],
   components: {
     CinemaBlock
   },
-  props: ["cinemas", "sourceRef", "isLoading"],
+  methods: {
+    deleteCinema(cinema) {
+      this.$emit("deleteCinema", cinema);
+    }
+  }
 }
 </script>
 
