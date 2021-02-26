@@ -13,7 +13,9 @@
         </thead>
         <tbody>
           <tr :key="item" v-for="item in list" class="table__row">
-            <td :key="key" v-for="(prop, key) in settings.props" class="table__cell table__data">{{ item[lang][key] }}</td>
+            <td :key="key" v-for="(prop, key) in settings.props" class="table__cell table__data">
+              {{ item[lang][key] }}
+            </td>
             <td v-if="settings.hasEdit && item.isEditable !== false" class="data__btn">
               <button @click="$emit('editItem', item)" class="btn btn-default">Редактировать</button>
             </td>
@@ -56,6 +58,7 @@ export default {
 
   .table__cell {
     width: 450px;
+    vertical-align: middle;
   }
 
   .table__row:nth-child(2n + 1) .table__data {
@@ -65,10 +68,10 @@ export default {
   .data__btn {
     border: 0;
     padding: 0 !important;
+    vertical-align: middle;
   }
 
   .data__btn .btn {
-    margin-top: 5px;
     margin-left: 15px;
     margin-right: 15px;
   }
