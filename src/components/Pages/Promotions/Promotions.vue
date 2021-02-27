@@ -1,19 +1,19 @@
 <template>
-  <div class="news">
+  <div class="promotions">
     <DataTable 
       v-if="!isEditing" 
-      :list="news.list" 
-      :settings="newsTableSettings" 
+      :list="promotions.list" 
+      :settings="promotionsTableSettings" 
       :lang="'ukr'" 
-      @addItem="addNews"
-      @editItem="editNews"
-      @deleteItem="deleteNews" 
+      @addItem="addPromotion" 
+      @editItem="editPromotion" 
+      @deleteItem="deletePromotion" 
     />
-    <NewsEdit 
+    <PromotionEdit 
       v-else-if="isEditing" 
-      :news="editingNews" 
+      :promotion="editingPromotion" 
       :sourceRef="ref" 
-      @saveNews="saveNews" 
+      @savePromotion="savePromotion" 
     />
     <div v-if="isLoading" class="overlay">
       <i class="fas fa-2x fa-sync-alt fa-spin"></i>
@@ -23,7 +23,7 @@
 
 <script>
 import DataTable from '@/components/DataTable.vue';
-import NewsEdit from './NewsEdit.vue';
+import PromotionEdit from './PromotionEdit.vue';
 import database from '@/scripts/database.js';
 import DataUpdader from '@/scripts/DataUpdater.js';
 import ImagesCollector from '@/scripts/ImagesCollector.js';
@@ -32,23 +32,23 @@ import InfoList from '@/scripts/ListManager.js';
 let infoList = new InfoList();
 
 export default {
-  name: 'News',
+  name: 'Promotions',
   components: {
     DataTable,
-    NewsEdit
+    PromotionEdit
   },
   data() {
     return {
-      ref: "news/",
+      ref: "promotions/",
       isEditing: false,
       isLoading: true,
-      news: { 
+      promotions: { 
         imagesCounter: 0,
         list: []
       },
-      editingNews: {},
-      newsTableSettings: {
-        title: "Список новостей",
+      editingPromotion: {},
+      promotionsTableSettings: {
+        title: "Список акций",
         props: { 
           name: "Название", 
           creationDate: "Дата создания",
@@ -60,28 +60,28 @@ export default {
     }
   },
   methods: {
-    addNews() {
-      let news = {
-        rus: { name: "новая новость", creationDate: this.currentDate, status: "ВЫКЛ"},
-        ukr: { name: "новая новость", creationDate: this.currentDate, status: "ВЫКЛ"},
+    addPromotion() {
+      let promotion = {
+        rus: { name: "новая акция", creationDate: this.currentDate, status: "ВЫКЛ"},
+        ukr: { name: "новая акция", creationDate: this.currentDate, status: "ВЫКЛ"},
       }
 
-      this.news.list = this.news.list || [];
-      this.news.list.push(news);
+      this.promotions.list = this.promotions.list || [];
+      this.promotions.list.push(promotion);
 
       this.save();
     },
-    editNews(news) {
-      this.editingNews = news;
+    editPromotion(promotion) {
+      this.editingPromotion = promotion;
       this.isEditing = true;
     },
-    deleteNews(news) {
-      infoList.deleteItem(this.news.list, news);
+    deletePromotion(promotion) {
+      infoList.deleteItem(this.promotions.list, promotion);
       this.save();
     },
-    saveNews(news) {
-      this.editingNews.ukr = news.ukr;
-      this.editingNews.rus = news.rus;
+    savePromotion(promotion) {
+      this.editingPromotion.ukr = promotion.ukr;
+      this.editingPromotion.rus = promotion.rus;
 
       this.isEditing = false;
       this.save();
@@ -90,10 +90,10 @@ export default {
       let handle = list => {
         let images = [];
 
-        ImagesCollector.pushImages(this.news.list, images, "mainImage");
-        ImagesCollector.pushInnerImages(this.news.list, "gallery", images, "image");
+        ImagesCollector.pushImages(this.promotions.list, images, "mainImage");
+        ImagesCollector.pushInnerImages(this.promotions.list, "gallery", images, "image");
 
-        DataUpdader.handleImagesByCallback(images, list, this.ref, () => this.news.imagesCounter++);
+        DataUpdader.handleImagesByCallback(images, list, this.ref, () => this.promotions.imagesCounter++);
 
         this.handleData();
       };
@@ -101,11 +101,11 @@ export default {
       database.getAllImagesAsync(this.ref, handle);
     },
     handleData() {
-      database.writeData(this.ref, this.news);
+      database.writeData(this.ref, this.promotions);
     },
     updateBox(list) {
       if(list !== null) {
-        this.news = list;
+        this.promotions = list;
       }
 
       this.isLoading = false;
@@ -127,7 +127,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.news {
+.promotions {
   position: relative;
 }
 

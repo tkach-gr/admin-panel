@@ -9,6 +9,7 @@ import Datepicker from 'vue3-datepicker';
 
 function getDate(str) {
   let cells = str.split('.');
+  cells[1] -= 1;
   return new Date(...cells.reverse());
 }
 

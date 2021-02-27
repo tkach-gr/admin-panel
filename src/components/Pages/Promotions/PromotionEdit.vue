@@ -3,8 +3,8 @@
     <div class="card-header">
       <h3 class="card-title">Редактирование новости</h3>
       <div class="custom-control custom-switch card__enabled">
-        <input v-model="isEnabled" type="checkbox" class="custom-control-input" id="NewsEnabled">
-        <label class="custom-control-label" for="NewsEnabled"></label>
+        <input v-model="isEnabled" type="checkbox" class="custom-control-input" id="PromotionEnabled">
+        <label class="custom-control-label" for="PromotionEnabled"></label>
       </div>
       <div class="card__menu btn-group">
         <div ref="ukrLang" @click="changeLang('ukr')" class="card__item btn btn-default selected">Украинский</div>
@@ -68,8 +68,8 @@ import Gallery from './Gallery.vue';
 import DatePicker from '@/components/DatePicker.vue';
 
 export default {
-  name: "NewsEdit",
-  props: ["sourceRef", "news"],
+  name: "PromotionEdit",
+  props: ["sourceRef", "promotion"],
   components: {
     ImageBlock,
     Gallery,
@@ -77,9 +77,9 @@ export default {
   },
   data() {
     return {
-      edit: JSON.parse(JSON.stringify(this.news)),
+      edit: JSON.parse(JSON.stringify(this.promotion)),
       lang: "ukr",
-      isEnabled: this.news.ukr.status === 'ВКЛ'
+      isEnabled: this.promotion.ukr.status === 'ВКЛ'
     }
   },
   methods: {
@@ -102,7 +102,7 @@ export default {
     },
     changeDate(newValue) {
       let date = newValue.getDate();
-      let month = newValue.getMonth();
+      let month = newValue.getMonth() + 1;
       date = date < 10 ? '0' + date: date;
       month = month < 10 ? '0' + month: month;
 
@@ -112,10 +112,10 @@ export default {
       this.edit['ukr'].creationDate = changed;
     },
     save() {
-      this.$emit("saveNews", this.edit);
+      this.$emit("savePromotion", this.edit);
     },
     returnDefault() {
-      this.edit = this.news;
+      this.edit = this.promotion;
     }
   },
   watch: {
