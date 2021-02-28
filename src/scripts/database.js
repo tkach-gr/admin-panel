@@ -29,6 +29,18 @@ class Database {
     });
   }
 
+  listenArray(ref, change, start, length) {
+    const dataRef = firebase.database()
+        .ref(ref)
+        .startAt(null, start.toString())
+        .endBefore(null, (start + length).toString());
+
+    dataRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      change(data);
+    });
+  }
+
   putImage(path, image) {
     let storageRef = firebase.storage().ref();
     let ref = storageRef.child(path);
@@ -85,6 +97,14 @@ class DatabaseProxy {
 
   listenData(ref, change) {
     this.database.listenData(ref, change);
+  }
+
+  writeArray(ref, data, start, length) {
+    this.database.writeArray(ref, data, start, length);
+  }
+
+  listenArray(ref, change, start, length) {
+    this.database.listenArray(ref, change, start, length);
   }
 
   putImage(path, image) {

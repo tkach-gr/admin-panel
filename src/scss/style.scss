@@ -52,6 +52,32 @@ html, body, .wrapper, .sidebar {
   position: relative;
 }
 
+.btn-save::before {
+  content: "Пароли не совпадают";
+  position: absolute;
+  top: 0;
+  left: 100%;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 100%;
+  margin-left: 20px;
+  color: #FFC109;
+  border: #FFC109 1px solid;
+  border-radius: 0.25rem;
+  opacity: 0;
+  transition:
+    visibility 0.4s ease,
+    opacity 0.4s ease;
+}
+
+.btn-save.warning::before {
+  visibility: visible;
+  opacity: 1;
+}
+
 .btn-save::after {
   content: "Сохранено";
   position: absolute;

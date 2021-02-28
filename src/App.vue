@@ -9,6 +9,7 @@
 		<News class="page" v-else-if="currentPage === 'news'" />
 		<Promotions class="page" v-else-if="currentPage === 'promotions'" />
     <UsersPages class="page" v-else-if="currentPage === 'pages'" />
+    <Users class="page" v-else-if="currentPage === 'users'" />
 	</div>
 </template>
 
@@ -21,7 +22,8 @@ import Films from './components/Pages/Films/Films.vue';
 import Cinemas from './components/Pages/Cinemas/Cinemas.vue';
 import News from './components/Pages/News/News.vue';
 import Promotions from './components/Pages/Promotions/Promotions.vue';
-import UsersPages from './components/Pages/UsersPages/UsersPages';
+import UsersPages from './components/Pages/UsersPages/UsersPages.vue';
+import Users from './components/Pages/Users/Users.vue';
 
 export default {
 	name: 'App',
@@ -44,7 +46,8 @@ export default {
 		Cinemas,
 		News,
 		Promotions,
-    UsersPages
+    UsersPages,
+    Users
 	}
 }
 </script>

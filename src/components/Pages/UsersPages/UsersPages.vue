@@ -21,6 +21,12 @@
         :sourceRef="ref"
         @savePage="savePage"
     />
+    <ContactsPageEdit
+        v-else-if="editingMode === 'contacts'"
+        :page="editingPage"
+        :sourceRef="ref"
+        @savePage="savePage"
+    />
     <div v-if="isLoading" class="overlay">
       <i class="fas fa-2x fa-sync-alt fa-spin"></i>
     </div>
@@ -30,11 +36,13 @@
 <script>
 import DataTable from '@/components/DataTable.vue';
 import MainPageEdit from './MainPageEdit.vue';
+import ContactsPageEdit from "./ContactsPageEdit";
 import CommonPageEdit from './CommonPageEdit.vue';
 import database from '@/scripts/database.js';
 import DataUpdater from '@/scripts/DataUpdater.js';
 import ImagesCollector from '@/scripts/ImagesCollector.js';
 import InfoList from '@/scripts/ListManager.js';
+
 
 let infoList = new InfoList();
 
@@ -43,6 +51,7 @@ export default {
   components: {
     DataTable,
     MainPageEdit,
+    ContactsPageEdit,
     CommonPageEdit
   },
   data() {
@@ -93,7 +102,7 @@ export default {
     },
     addDefaultPages() {
       let defaults = [
-        this.getNewPage("Главная страница", "main", "ВКЛ", false, false),
+        this.getNewPage("Главная страница", "main", "ВКЛ", false),
         this.getNewPage("О кинотеатре", "common", "ВКЛ", false),
         this.getNewPage("Кафе - Бар", "common", "ВКЛ", false),
         this.getNewPage("Vip - зал", "common", "ВКЛ", false),
@@ -117,6 +126,15 @@ export default {
 
         ImagesCollector.pushImages(this.pages.list, images, "mainImage");
         ImagesCollector.pushInnerImages(this.pages.list, "gallery", images, "image");
+
+        this.pages.list.map(item => {
+          if(item["ukr"].page !== "contacts") { return; }
+          item["ukr"].list.map(subitem => images.push({
+            image: subitem["ukr"]["mainImage"],
+            imageFile: subitem["ukr"]["mainImageFile"],
+            changeImage: name => subitem["ukr"]["mainImage"] = name
+          }));
+        });
 
         DataUpdater.handleImagesByCallback(images, list, this.ref, () => this.pages.imagesCounter++);
 
