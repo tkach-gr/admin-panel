@@ -62,7 +62,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <div ref="sendings" @click="changePage('sendings')" class="nav-link">
+            <div ref="sending" @click="changePage('sending')" class="nav-link">
               <p>
                 Рассылка
               </p>

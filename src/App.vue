@@ -10,6 +10,7 @@
 		<Promotions class="page" v-else-if="currentPage === 'promotions'" />
     <UsersPages class="page" v-else-if="currentPage === 'pages'" />
     <Users class="page" v-else-if="currentPage === 'users'" />
+    <Sending class="page" v-else-if="currentPage === 'sending'" />
 	</div>
 </template>
 
@@ -24,6 +25,7 @@ import News from './components/Pages/News/News.vue';
 import Promotions from './components/Pages/Promotions/Promotions.vue';
 import UsersPages from './components/Pages/UsersPages/UsersPages.vue';
 import Users from './components/Pages/Users/Users.vue';
+import Sending from "./components/Pages/Sending/Sending.vue";
 
 export default {
 	name: 'App',
@@ -47,7 +49,8 @@ export default {
 		News,
 		Promotions,
     UsersPages,
-    Users
+    Users,
+    Sending
 	}
 }
 </script>

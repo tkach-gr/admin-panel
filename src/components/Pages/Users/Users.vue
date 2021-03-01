@@ -2,9 +2,10 @@
   <div class="users">
     <DataTable 
       v-if="!isEditing" 
-      :list="users.list"
+      :list="tableData"
       :settings="usersTableSettings"
-      :lang="'ukr'" 
+      :lang="'ukr'"
+      @search="searchUser"
       @addItem="addUser"
       @editItem="editUser"
       @deleteItem="deleteUser"
@@ -45,8 +46,7 @@ export default {
         list: []
       },
       editingUser: {},
-      start: 0,
-      length: 10,
+      tableData: [],
       usersTableSettings: {
         title: "Список пользователей",
         props: {
@@ -56,10 +56,11 @@ export default {
           email: "E-mail",
           phone: "Номер телефона",
           name: "Имя",
-          surname: "Фамимилия",
+          surname: "Фамилия",
           nickname: "Псевдоним",
           city: "Город",
         },
+        hasSearch: true,
         showIndexes: true,
         hasEdit: true,
         hasDelete: true,
@@ -70,7 +71,7 @@ export default {
     addUser() {
       let user = {
         ukr: {
-          id: 0,
+          id: this.users.list.length,
           registrationDate: this.currentDate,
           bornDate: this.currentDate,
           email: "E-mail не указан",
@@ -95,6 +96,9 @@ export default {
       infoList.deleteItem(this.users.list, user);
       this.save();
     },
+    searchUser(list, input) {
+      this.tableData = this.users.list.filter(value => value.ukr.nickname.indexOf(input) === 0);
+    },
     saveUser(user) {
       this.editingUser.ukr = user.ukr;
 
@@ -105,21 +109,15 @@ export default {
       this.handleData();
     },
     handleData() {
-      for(let item of this.users.list) {
-        database.writeData(`${this.ref}list/${item.id}`, item);
-        console.log(`${this.ref}list/${item.ukr.id}`);
-      }
+      database.writeData(this.ref, this.users);
     },
     updateBox(list) {
-      if(list !== null) {
-        for(let i = 0; i < list.length; i++) {
-          if(list[i] === undefined) { continue; }
-
-          list[i].ukr.id = i;
-          this.users.list.push(list[i]);
-        }
+      if(list !== null && list !== undefined) {
+        this.users.list = list.list;
       }
 
+      this.users.list = this.users.list || [];
+      this.tableData = this.users.list;
       this.isLoading = false;
     }
   },
@@ -133,8 +131,7 @@ export default {
     }
   },
   mounted() {
-    // database.listenData(this.ref, this.updateBox.bind(this));
-    database.listenArray(this.ref + 'list', this.updateBox.bind(this), this.start, this.length);
+    database.listenData(this.ref, this.updateBox.bind(this));
   }
 }
 </script>
