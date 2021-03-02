@@ -103,6 +103,6 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 40px;
-  margin-bottom: 40px;
+  padding-bottom: 40px;
 }
 </style>

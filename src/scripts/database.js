@@ -1,9 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/storage';
-import { proxyRefs } from 'vue';
 
-var firebaseConfig = {
+let firebaseConfig = {
   apiKey: 'AIzaSyAWzu3Jcw4Q6dGWEywpteKP6Hi1FC_GENQ',
   authDomain: 'admin-panel-5baec.firebaseapp.com',
   databaseURL: 'https://admin-panel-5baec-default-rtdb.firebaseio.com',
@@ -27,6 +26,10 @@ class Database {
       const data = snapshot.val();
       change(data);
     });
+  }
+
+  pushData(ref, data) {
+    firebase.database().ref(ref).push(data);
   }
 
   putImage(path, image) {
@@ -73,22 +76,10 @@ class Database {
   }
 }
 
-class DatabaseProxy {
-  constructor(database) {
-    this.database = database;
+class DatabaseProxy extends Database{
+  constructor() {
+    super();
     this.imagesCache = {};
-  }
-
-  writeData(ref, data) {
-    this.database.writeData(ref, data);
-  }
-
-  listenData(ref, change) {
-    this.database.listenData(ref, change);
-  }
-
-  putImage(path, image) {
-    this.database.putImage(path, image);
   }
 
   getImageUrl(path, callback, triesLeft = 20) {
@@ -100,10 +91,6 @@ class DatabaseProxy {
         callback(url);
       }, triesLeft);
     }
-  }
-
-  getAllImagesAsync(path, callback) {
-    this.database.getAllImagesAsync(path, callback);
   }
 }
 

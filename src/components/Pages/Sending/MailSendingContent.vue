@@ -31,11 +31,11 @@
 
 <script>
 export default {
-  name: "SmsSendingContent",
+  name: "MailSendingContent",
   props: ["selectedUsers", "sendingEvent"],
   data() {
     return {
-      sourceRef: "sending/sms",
+      sourceRef: "sending/mail",
       message: "",
       messageLength: 0,
       progress: 0,

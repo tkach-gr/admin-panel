@@ -4,10 +4,12 @@
       <h3 class="card-title">{{ title }}</h3>
     </div>
     <div class="card-body">
-      <SendingModeSelection @selectUsers="selectUsers" />
-      <SmsSendingContent ref="sms" :setPropertyNotifier="setPropertyNotifier"></SmsSendingContent>
+      <SendingModeSelection ref="modeSelection" @selectUsers="selectUsers" />
+      <div class="template-body">
+        <slot ref="content" :selectedUsers="selectedUsers" :sendingEvent="sendingEvent"></slot>
+      </div>
       <div class="controls">
-        <button class="btn btn-default">Начать рассылку</button>
+        <button @click="send" class="btn btn-default">Начать рассылку</button>
       </div>
     </div>
   </div>
@@ -16,6 +18,10 @@
 <script>
 import SendingModeSelection from "./SendingModeSelection.vue";
 import SmsSendingContent from "./SmsSendingContent.vue";
+import database from "@/scripts/database";
+import Event from "@/scripts/Event";
+
+let sendingEvent = new Event();
 
 export default {
   name: "SendingTemplate",
@@ -26,51 +32,49 @@ export default {
   },
   data() {
     return {
-      notifier: {
-        callback: null
-      },
-      sentMessagesAmount: 0,
-      totalMessagesAmount: 0,
+      sendingEvent: sendingEvent
     };
   },
   methods: {
-    pushUser(user) {
-      this.selectedUsers.push(user);
-      this.totalMessagesAmount++;
-      console.log(this.totalMessagesAmount)
-      this.notify();
-    },
     selectUsers() {
-      this.$emit("selectUsers", user => this.pushUser(user));
+      this.$emit("selectUsers");
     },
-    setPropertyNotifier(callback) {
-      this.notifier.callback = callback;
-      this.$refs.sms.sentMessagesAmount = this.sentMessagesAmount;
-      this.$refs.sms.totalMessagesAmount = this.totalMessagesAmount;
-      console.log(this.$refs.sms);
-      console.log(this.totalMessagesAmount);
+    send() {
+      const info = this.sendingEvent.getInfo();
+
+      if(info.message === null || this.selectedUsers.length === 0) { return; }
+
+      const data = {
+        message: info.message,
+        mode: this.$refs.modeSelection.mode,
+        users: this.selectedUsers,
+      };
+
+      database.pushData(info.ref, data)
+
+      this.imitateStatistics();
     },
-    notify() {
-      if(this.notifier.callback) {
-        this.notifier.callback(this.sentMessagesAmount, this.totalMessagesAmount);
+    imitateStatistics() {
+      let count = 0;
+      let amount = this.selectedUsers.length;
+      let notifier = () => {
+        if(count < amount) {
+          this.sendingEvent.notify(++count);
+          setTimeout(notifier, 1000);
+        }
       }
+
+      setTimeout(notifier, 1000);
     }
-  },
-  mounted() {
-    if(this.selectedUsers !== undefined) {
-      console.log(this.selectedUsers)
-      this.totalMessagesAmount = this.selectedUsers.length;
-      console.log(this.totalMessagesAmount);
-    }
-    this.$refs.sms.sentMessagesAmount = this.sentMessagesAmount;
-    this.$refs.sms.totalMessagesAmount = this.totalMessagesAmount;
-    console.log(this.totalMessagesAmount);
-    console.log(this.$refs.sms.totalMessagesAmount);
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.template-body {
+  margin-top: 30px;
+}
+
 .controls {
   display: flex;
   justify-content: center;

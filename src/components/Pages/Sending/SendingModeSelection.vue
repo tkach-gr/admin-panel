@@ -28,7 +28,7 @@ export default {
   name: "SendingModeSelection",
   data() {
     return {
-      mode: "",
+      mode: "all",
     };
   }
 };
