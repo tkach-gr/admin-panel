@@ -21,8 +21,6 @@ import SmsSendingContent from "./SmsSendingContent.vue";
 import database from "@/scripts/database";
 import Event from "@/scripts/Event";
 
-let sendingEvent = new Event();
-
 export default {
   name: "SendingTemplate",
   props: ["title", "selectedUsers"],
@@ -32,7 +30,7 @@ export default {
   },
   data() {
     return {
-      sendingEvent: sendingEvent
+      sendingEvent: new Event()
     };
   },
   methods: {

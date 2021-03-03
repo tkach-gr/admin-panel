@@ -32,6 +32,14 @@ class Database {
     firebase.database().ref(ref).push(data);
   }
 
+  listenLastItems(ref, count, change) {
+    const dataRef = firebase.database().ref(ref);
+    dataRef.limitToLast(count).on('value', (snapshot) => {
+      const data = snapshot.val();
+      change(data);
+    });
+  }
+
   putImage(path, image) {
     let storageRef = firebase.storage().ref();
     let ref = storageRef.child(path);
@@ -86,7 +94,7 @@ class DatabaseProxy extends Database{
     if(this.imagesCache[path] !== undefined) {
       callback(this.imagesCache[path]);
     } else {
-      this.database.getImageUrl(path, url => {
+      super.getImageUrl(path, url => {
         this.imagesCache[path] = url;
         callback(url);
       }, triesLeft);
