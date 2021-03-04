@@ -1,9 +1,17 @@
 <template>
   <div class="info-block">
-    <img ref="filePreview" class="info-bloc__image">
+    <img v-if="imageSource !== null" ref="filePreview" class="info-bloc__image">
     <input ref="fileDialog" @change="saveImage" style="display: none;" type="file">
-    <button @click="openFileDialog" class="btn btn-block btn-default info-block__add">Добавить</button>
-    <button @click="deleteImage" class="btn btn-block btn-default info-block__add">Удалить</button>
+    <button
+        v-if="imageSource === null"
+        @click="openFileDialog"
+        class="btn btn-block btn-default info-block__add"
+    >Добавить</button>
+    <button
+        v-if="imageSource !== null"
+        @click="deleteImage"
+        class="btn btn-block btn-default info-block__add"
+    >Удалить</button>
   </div>
 </template>
 
@@ -58,6 +66,10 @@ export default {
       }
 
       if(this.imageSource === undefined) {
+
+        this.imageSource = null;
+
+      } else if(this.imageSource === "") {
 
         this.imageSource = null;
 

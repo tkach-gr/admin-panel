@@ -1,9 +1,17 @@
 <template>
   <div class="info-block">
-    <img ref="filePreview" class="info-bloc__image">
+    <img v-show="imageSource !== ''" ref="filePreview" class="info-bloc__image">
     <input ref="fileDialog" @change="saveImage" style="display: none;" type="file">
-    <button @click="openFileDialog" class="btn btn-block btn-default info-block__add">Загрузить</button>
-    <button @click="deleteImage" class="btn btn-block btn-default info-block__add">Удалить</button>
+    <button
+        v-if="imageSource === ''"
+        @click="openFileDialog"
+        class="btn btn-block btn-default info-block__add"
+    >Загрузить</button>
+    <button
+        v-if="imageSource !== ''"
+        @click="deleteImage"
+        class="btn btn-block btn-default info-block__add"
+    >Удалить</button>
   </div>
 </template>
 

@@ -9,15 +9,13 @@
       </div>
       <div class="card-body__center">
         <div class="form-group">
-          <div class="custom-control custom-radio">
-            <input v-model="background" class="custom-control-input" type="radio" id="customRadioWith" value="with" @click="changeMode">
-            <label for="customRadioWith" class="custom-control-label">Фото на фон</label>
-            <MainPageBackBlock ref="block" v-if="isLoading !== true" :sourceRef="ref" :image="image" @imageChanged="changeImage" />
-          </div>
-          <div class="custom-control custom-radio">
-            <input v-model="background" class="custom-control-input" type="radio" id="customRadioWithout" value="without" @click="changeMode">
-            <label for="customRadioWithout" class="custom-control-label">Просто фон</label>
-          </div>
+          <MainPageBackBlock
+              v-if="isLoading !== true"
+              ref="block"
+              :sourceRef="ref"
+              :image="image"
+              @imageChanged="changeImage"
+          />
         </div>
       </div>
     </div>
@@ -81,13 +79,12 @@ export default {
     changeImage(img) {
       if(img !== null) {
         this.image = img;
+        this.background = "with";
       } else {
         this.image = "";
+        this.background = "without";
       }
 
-      this.save();
-    },
-    changeMode() {
       this.save();
     }
   },
