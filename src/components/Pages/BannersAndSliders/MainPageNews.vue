@@ -14,9 +14,17 @@
         </div>
       </div>
       <div class="card-body__center">
-        <MainPageNewsBlock :key="item" :sourceRef="ref" :data="item" v-on:remove="dataBlocks.splice(index, 1)"
-          v-for="(item, index) in dataBlocks" class="card__block" />
-        <button @click="addItem()" class="btn btn-default card__add-block">Добавить<br>фото</button>
+        <MainPageNewsBlock
+            v-for="(item, index) in dataBlocks" class="card__block"
+            :key="item"
+            :sourceRef="ref"
+            :data="item"
+            @remove="dataBlocks.splice(index, 1)"
+        />
+        <button @click="openFileDialog()" class="btn btn-default card__add-block">
+          <input ref="fileDialog" @change="saveImage" onclick="this.value=null;" style="display: none;" type="file">
+          Добавить<br>фото
+        </button>
       </div>
       <div class="card-body__bottom">
         <div class="seconds">
@@ -58,8 +66,17 @@ export default {
     }
   },
   methods: {
-    addItem() {
-      infoList.addItem(this.dataBlocks);
+    openFileDialog() {
+      this.$refs.fileDialog.click();
+    },
+    saveImage() {
+      const file = this.$refs.fileDialog.files[0];
+      if(file !== undefined) {
+        this.dataBlocks.push({
+          image: null,
+          imageFile: this.$refs.fileDialog.files[0],
+        })
+      }
     },
     save() {
       this.$refs.btnSave.classList.add("show");

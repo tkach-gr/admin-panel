@@ -27,7 +27,7 @@
         <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].topBannerImage" @imageChanged="changeTopBannerImage" />
       </div>
       <div class="input-row gallery">
-        <div class="input-row__label gallery__title">Галлерея картинок<br>Размер: 1000x190</div>
+        <div class="input-row__label gallery__title">Галлерея картинок<br>Размер: 1000x420</div>
         <Gallery v-if="lang === 'ukr'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
         <Gallery v-else-if="lang === 'rus'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
       </div>

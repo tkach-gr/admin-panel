@@ -1,9 +1,17 @@
 <template>
   <div class="gallery">
-    <GalleryItem :key="item" :sourceRef="sourceRef" :data="item"
-      v-on:remove="list.splice(index, 1)" v-for="(item, index) in list"
-      class="card__block" />
-    <button @click="addItem()" class="btn btn-default card__add-block">Добавить<br>фото</button>
+    <GalleryItem
+        v-for="(item, index) in list"
+        :key="item"
+        :sourceRef="sourceRef"
+        :data="item"
+        @remove="list.splice(index, 1)"
+        class="card__block"
+    />
+    <button @click="openFileDialog()" class="btn btn-default card__add-block">
+      <input ref="fileDialog" @change="saveImage" onclick="this.value=null;" style="display: none;" type="file">
+      Добавить<br>фото
+    </button>
   </div>
   
 </template>
@@ -18,8 +26,17 @@ export default {
     GalleryItem
   },
   methods: {
-    addItem() {
-      this.list.push({});
+    openFileDialog() {
+      this.$refs.fileDialog.click();
+    },
+    saveImage() {
+      const file = this.$refs.fileDialog.files[0];
+      if(file !== undefined) {
+        this.list.push({
+          image: null,
+          imageFile: this.$refs.fileDialog.files[0],
+        })
+      }
     },
   }
 }

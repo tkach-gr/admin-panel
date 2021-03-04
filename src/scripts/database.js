@@ -11,7 +11,7 @@ let firebaseConfig = {
   messagingSenderId: '538269401217',
   appId: '1:538269401217:web:9815938c68177c5db34d80',
   measurementId: 'G-QT0S23D9EW'
-}
+};
 
 firebase.initializeApp(firebaseConfig);
 
@@ -44,9 +44,7 @@ class Database {
     let storageRef = firebase.storage().ref();
     let ref = storageRef.child(path);
 
-    ref.put(image).then((snapshot) => {
-      // console.log(snapshot)
-    });
+    ref.put(image);
   }
 
   getImageUrl(path, callback, triesLeft = 20) {

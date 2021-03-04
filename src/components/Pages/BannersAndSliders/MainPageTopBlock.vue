@@ -6,10 +6,14 @@
       </svg>
     </div>
     <img ref="filePreview" class="info-bloc__image">
-    <input ref="fileDialog" @change="saveImage" style="display: none;" type="file">
-    <button @click="openFileDialog" class="btn btn-block btn-default info-block__add">Добавить</button>
-    <input v-model="dataSource.url" type="text" class="form-control info-block__input" placeholder="Url">
-    <input v-model="dataSource.text" type="text" class="form-control info-block__input" placeholder="Текст">
+    <div class="input-column">
+      <div class="input-label">Url:</div>
+      <input v-model="dataSource.url" type="text" class="form-control info-block__input" placeholder="Url">
+    </div>
+    <div class="input-column">
+      <div class="input-label">Текст:</div>
+      <input v-model="dataSource.text" type="text" class="form-control info-block__input" placeholder="Текст">
+    </div>
   </div>
 </template>
 
@@ -26,18 +30,6 @@ export default {
     }
   },
   methods: {
-    openFileDialog() {
-      const event = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: true
-      });
-      this.$refs.fileDialog.dispatchEvent(event);
-    },
-    saveImage() {
-      const file = this.$refs.fileDialog.files[0];
-      this.previewImage(file);  
-    },
     previewImage(file) {
       const preview = this.$refs.filePreview;
       const reader = new FileReader();
@@ -63,6 +55,8 @@ export default {
       database.getImageUrl(`${this.sourceRef}${this.dataSource.image}`, url => {
         this.$refs.filePreview.src = url;
       }); 
+    } else if(this.dataSource.imageFile !== null) {
+      this.previewImage(this.dataSource.imageFile);
     }
   },
 }
@@ -78,7 +72,7 @@ export default {
 
 .info-bloc__image {
   width: 200px;
-  height: 38px;
+  height: 84px;
   background: #007BFF;
   border-radius: 0.25rem;
   background-size: cover;
@@ -105,7 +99,14 @@ export default {
   margin-top: 20px;
 }
 
+.input-column {
+  margin-top: 10px;
+}
+
+.input-label {
+}
+
 .info-block__input {
-  margin-top: 9px;
+  flex: 140px 0 0;
 }
 </style>
