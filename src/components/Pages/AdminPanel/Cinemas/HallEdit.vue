@@ -1,11 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Редактирование новости</h3>
-      <div class="custom-control custom-switch card__enabled">
-        <input v-model="isEnabled" type="checkbox" class="custom-control-input" id="NewsEnabled">
-        <label class="custom-control-label" for="NewsEnabled"></label>
-      </div>
+      <h3 class="card-title">Редактирование кинотеатра</h3>
       <div class="card__menu btn-group">
         <div ref="ukrLang" @click="changeLang('ukr')" class="card__item btn btn-default selected">Украинский</div>
         <div ref="rusLang" @click="changeLang('rus')" class="card__item btn btn-default">Русский</div>
@@ -13,21 +9,46 @@
     </div>
     <div class="card-body">
       <div class="input-row">
-        <div class="input-row__label">Навание новости</div>
-        <input v-model="edit[lang].name" type="text" class="form-control" placeholder="Название новости">
+        <div class="input-row__label">Номер зала</div>
+        <input v-model="edit[lang].name" type="text" class="form-control" placeholder="Номер зала">
       </div>
       <div class="input-row">
-        <div class="input-row__label">Дата публикации</div>
-        <DatePicker :date="edit[lang].creationDate" @changeDate="changeDate"/>
+        <div class="input-row__label">Описание зала</div>
+        <textarea v-model="edit[lang].description" class="form-control" placeholder="Описание зала"></textarea>
       </div>
       <div class="input-row">
-        <div class="input-row__label">Описание </div>
-        <textarea v-model="edit[lang].text" class="form-control" placeholder="Описание"></textarea>
+        <div class="input-row__label">Cхема зала </div>
+        <ImageBlock
+            v-if="lang === 'ukr'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].schemaImage"
+            :file="edit[lang].schemaImageFile"
+            @imageChanged="changeSchemaImage"
+        />
+        <ImageBlock
+            v-else-if="lang === 'rus'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].schemaImage"
+            :file="edit[lang].schemaImageFile"
+            @imageChanged="changeSchemaImage"
+        />
       </div>
       <div class="input-row">
-        <div class="input-row__label mt">Главная картинка </div>
-        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
-        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
+        <div class="input-row__label mt">Верхний баннера </div>
+        <ImageBlock
+            v-if="lang === 'ukr'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].topBannerImage"
+            :file="edit[lang].topBannerImageFile"
+            @imageChanged="changeTopBannerImage"
+        />
+        <ImageBlock
+            v-else-if="lang === 'rus'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].topBannerImage"
+            :file="edit[lang].topBannerImageFile"
+            @imageChanged="changeTopBannerImage"
+        />
       </div>
       <div class="input-row gallery">
         <div class="input-row__label gallery__title">Галлерея картинок<br>Размер: 1000x420</div>
@@ -65,32 +86,38 @@
 <script>
 import ImageBlock from './ImageBlock.vue';
 import Gallery from './Gallery.vue';
-import DatePicker from '@/components/DatePicker.vue';
 
 export default {
-  name: "NewsEdit",
-  props: ["sourceRef", "news"],
+  name: "HallEdit",
+  props: ["sourceRef", "hall"],
   components: {
     ImageBlock,
     Gallery,
-    DatePicker
   },
   data() {
     return {
-      edit: JSON.parse(JSON.stringify(this.news)),
+      edit: JSON.parse(JSON.stringify(this.hall)),
       lang: "ukr",
-      isEnabled: this.news.ukr.status === 'ВКЛ'
     }
   },
   methods: {
-    changeMainImage(image, file = null) {
+    changeSchemaImage(image, file = null) {
       if(image !== null) {
-        this.edit[this.lang].mainImage = image;
+        this.edit[this.lang].schemaImage = image;
       } else {
-        this.edit[this.lang].mainImage = ""; 
+        this.edit[this.lang].schemaImage = ""; 
+      }
+
+      this.edit[this.lang].schemaImageFile = file;
+    },
+    changeTopBannerImage(image, file = null) {
+      if(image !== null) {
+        this.edit[this.lang].topBannerImage = image;
+      } else {
+        this.edit[this.lang].topBannerImage = ""; 
       }
       
-      this.edit[this.lang].mainImageFile = file;
+      this.edit[this.lang].topBannerImageFile = file;
     },
     changeLang(lang) {
       this.lang = lang;
@@ -100,33 +127,22 @@ export default {
 
       this.$refs[lang + "Lang"].classList.add("selected");
     },
-    changeDate(newValue) {
-      let date = newValue.getDate();
-      let month = newValue.getMonth() + 1;
-      date = date < 10 ? '0' + date: date;
-      month = month < 10 ? '0' + month: month;
-
-      let changed = `${date}.${month}.${newValue.getFullYear()}`;
-
-      this.edit['rus'].creationDate = changed;
-      this.edit['ukr'].creationDate = changed;
-    },
     save() {
-      this.$emit("saveNews", this.edit);
-    },
-    returnDefault() {
-      this.edit = this.news;
+      this.$emit("saveHall", this.edit);
     }
   },
-  watch: {
-    isEnabled(newValue) {
-      let changed;
-      if(newValue === true) { changed = 'ВКЛ' }
-      else { changed = 'ВЫКЛ' }
-
-      this.edit.ukr.status = changed;
-      this.edit.rus.status = changed;
+  created() {
+    let returnOriginFile = (lang, prop) => {
+      if(this.hall[lang][prop] !== undefined) {
+        this.edit[lang][prop] = this.hall[lang][prop];
+      }
     }
+
+    returnOriginFile("rus", "topBannerImageFile");
+    returnOriginFile("ukr", "topBannerImageFile");
+
+    returnOriginFile("rus", "schemaImageFile");
+    returnOriginFile("ukr", "schemaImageFile");
   },
   mounted() {
     this.edit.rus.gallery = this.edit.rus.gallery || [];
@@ -146,10 +162,6 @@ export default {
     flex: 200px 1 1;
     display: flex;
     justify-content: flex-start;
-  }
-
-  .card__enabled {
-    margin: 0 30px;
   }
 
   .card__item.selected {
@@ -200,6 +212,24 @@ export default {
     width: 160px;
     margin-right: 15px;
     height: 38px;
+  }
+
+  .checkbox-list {
+    display: flex;
+    align-items: center;
+    margin-left: -25px;
+  }
+
+  .checkbox-list__group {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+  }
+
+  .checkbox-list__label {
+    margin-left: 10px;
+    margin-bottom: 0;
+    font-weight: normal !important;
   }
 
   .controls {

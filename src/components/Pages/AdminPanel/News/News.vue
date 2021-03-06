@@ -1,19 +1,19 @@
 <template>
-  <div class="promotions">
+  <div class="news">
     <DataTable 
       v-if="!isEditing" 
-      :list="promotions.list" 
-      :settings="promotionsTableSettings" 
+      :list="news.list" 
+      :settings="newsTableSettings" 
       :lang="'ukr'" 
-      @addItem="addPromotion" 
-      @editItem="editPromotion" 
-      @deleteItem="deletePromotion" 
+      @addItem="addNews"
+      @editItem="editNews"
+      @deleteItem="deleteNews" 
     />
-    <PromotionEdit 
+    <NewsEdit 
       v-else-if="isEditing" 
-      :promotion="editingPromotion" 
+      :news="editingNews" 
       :sourceRef="ref" 
-      @savePromotion="savePromotion" 
+      @saveNews="saveNews" 
     />
     <div v-if="isLoading" class="overlay">
       <i class="fas fa-2x fa-sync-alt fa-spin"></i>
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import DataTable from '@/components/DataTable.vue';
-import PromotionEdit from './PromotionEdit.vue';
+import DataTable from '@/components/Pages/AdminPanel/DataTable.vue';
+import NewsEdit from './NewsEdit.vue';
 import database from '@/scripts/database.js';
 import DataUpdader from '@/scripts/DataUpdater.js';
 import ImagesCollector from '@/scripts/ImagesCollector.js';
@@ -32,23 +32,23 @@ import InfoList from '@/scripts/ListManager.js';
 let infoList = new InfoList();
 
 export default {
-  name: 'Promotions',
+  name: 'News',
   components: {
     DataTable,
-    PromotionEdit
+    NewsEdit
   },
   data() {
     return {
-      ref: "promotions/",
+      ref: "news/",
       isEditing: false,
       isLoading: true,
-      promotions: { 
+      news: { 
         imagesCounter: 0,
         list: []
       },
-      editingPromotion: {},
-      promotionsTableSettings: {
-        title: "Список акций",
+      editingNews: {},
+      newsTableSettings: {
+        title: "Список новостей",
         props: { 
           name: "Название", 
           creationDate: "Дата создания",
@@ -60,28 +60,40 @@ export default {
     }
   },
   methods: {
-    addPromotion() {
-      let promotion = {
-        rus: { name: "новая акция", creationDate: this.currentDate, status: "ВЫКЛ"},
-        ukr: { name: "новая акция", creationDate: this.currentDate, status: "ВЫКЛ"},
+    addNews() {
+      let news = {
+        rus: {
+          name: "новая новость",
+          mainImage: "",
+          creationDate: this.currentDate,
+          status: "ВЫКЛ"
+        },
+        ukr: {
+          name: "новая новость",
+          mainImage: "",
+          creationDate: this.currentDate,
+          status: "ВЫКЛ"
+        },
       }
 
-      this.promotions.list = this.promotions.list || [];
-      this.promotions.list.push(promotion);
+      this.news.list = this.news.list || [];
+      this.news.list.push(news);
 
-      this.save();
+      let newsList = this.news.list;
+      let lastNews = newsList[newsList.length - 1];
+      this.editNews(lastNews);
     },
-    editPromotion(promotion) {
-      this.editingPromotion = promotion;
+    editNews(news) {
+      this.editingNews = news;
       this.isEditing = true;
     },
-    deletePromotion(promotion) {
-      infoList.deleteItem(this.promotions.list, promotion);
+    deleteNews(news) {
+      infoList.deleteItem(this.news.list, news);
       this.save();
     },
-    savePromotion(promotion) {
-      this.editingPromotion.ukr = promotion.ukr;
-      this.editingPromotion.rus = promotion.rus;
+    saveNews(news) {
+      this.editingNews.ukr = news.ukr;
+      this.editingNews.rus = news.rus;
 
       this.isEditing = false;
       this.save();
@@ -90,10 +102,10 @@ export default {
       let handle = list => {
         let images = [];
 
-        ImagesCollector.pushImages(this.promotions.list, images, "mainImage");
-        ImagesCollector.pushInnerImages(this.promotions.list, "gallery", images, "image");
+        ImagesCollector.pushImages(this.news.list, images, "mainImage");
+        ImagesCollector.pushInnerImages(this.news.list, "gallery", images, "image");
 
-        DataUpdader.handleImagesByCallback(images, list, this.ref, () => this.promotions.imagesCounter++);
+        DataUpdader.handleImagesByCallback(images, list, this.ref, () => this.news.imagesCounter++);
 
         this.handleData();
       };
@@ -101,11 +113,11 @@ export default {
       database.getAllImagesAsync(this.ref, handle);
     },
     handleData() {
-      database.writeData(this.ref, this.promotions);
+      database.writeData(this.ref, this.news);
     },
     updateBox(list) {
       if(list !== null) {
-        this.promotions = list;
+        this.news = list;
       }
 
       this.isLoading = false;
@@ -127,7 +139,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.promotions {
+.news {
   position: relative;
 }
 

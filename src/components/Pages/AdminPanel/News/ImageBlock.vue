@@ -10,7 +10,7 @@
     <button
         v-if="imageSource !== ''"
         @click="deleteImage"
-        class="btn btn-block btn-default info-block__add"
+        class="btn btn-block btn-default info-block__delete"
     >Удалить</button>
   </div>
 </template>
@@ -19,7 +19,7 @@
 import database from '@/scripts/database.js';
 
 export default {
-  name: 'FilmMainImageBlock',
+  name: 'ImageBlock',
   props: ['sourceRef', 'image'],
   data() {
     return {
@@ -113,7 +113,13 @@ export default {
 }
 
 .info-block__add {
+  margin-left: 32px;
+  margin-right: 10px;
+}
+
+.info-block__delete {
   margin-left: 20px;
+  margin-right: 10px;
 }
 
 .btn-block + .btn-block {

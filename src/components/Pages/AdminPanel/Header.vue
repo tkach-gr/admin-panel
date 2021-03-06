@@ -22,7 +22,7 @@
       <div class="nav-item navbar__account">
         <a href="#" class="nav-link navbar__account-link">
           <div class="nav-img user-img">
-            <img src="../assets/admin.svg" alt="user image">
+            <img src="../../../assets/admin.svg" alt="user image">
           </div>
           Admin
         </a>

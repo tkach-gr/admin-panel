@@ -54,7 +54,7 @@
 <script>
 import ImageBlock from './ImageBlock.vue';
 import Gallery from './Gallery.vue';
-import DatePicker from '@/components/DatePicker.vue';
+import DatePicker from '@/components/Pages/AdminPanel/DatePicker.vue';
 
 export default {
   name: "MainPageEdit",

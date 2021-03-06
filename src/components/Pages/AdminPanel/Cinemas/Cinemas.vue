@@ -35,14 +35,16 @@ export default {
   methods: {
     addCinema() {
       let cinema = {
-        rus: { mainImage: "", name: "название кинотеатра"},
-        ukr: { mainImage: "", name: "название кинотеатра"}
+        rus: { mainImage: "", logoImage: "", name: "название кинотеатра"},
+        ukr: { mainImage: "", logoImage: "", name: "название кинотеатра"}
       }
 
       this.cinemas.list = this.cinemas.list || [];
       this.cinemas.list.push(cinema);
 
-      this.save();
+      let list = this.cinemas.list;
+      let currentCinema = list[list.length - 1];
+      this.editCinema(currentCinema);
     },
     editCinema(cinema) {
       this.editingCinema = cinema;

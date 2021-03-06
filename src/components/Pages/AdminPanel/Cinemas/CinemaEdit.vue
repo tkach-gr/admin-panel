@@ -23,13 +23,37 @@
       </div>
       <div class="input-row">
         <div class="input-row__label">Логотип </div>
-        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].logoImage" @imageChanged="changeLogoImage" />
-        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].logoImage" @imageChanged="changeLogoImage" />
+        <ImageBlock
+            v-if="lang === 'ukr'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].logoImage"
+            :file="edit[lang].logoImageFile"
+            @imageChanged="changeLogoImage"
+        />
+        <ImageBlock
+            v-else-if="lang === 'rus'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].logoImage"
+            :file="edit[lang].logoImageFile"
+            @imageChanged="changeLogoImage"
+        />
       </div>
       <div class="input-row">
         <div class="input-row__label mt">Фото верхнего баннера </div>
-        <ImageBlock v-if="lang === 'ukr'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
-        <ImageBlock v-else-if="lang === 'rus'" :sourceRef="sourceRef" :image="edit[lang].mainImage" @imageChanged="changeMainImage" />
+        <ImageBlock
+            v-if="lang === 'ukr'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].mainImage"
+            :file="edit[lang].mainImageFile"
+            @imageChanged="changeMainImage"
+        />
+        <ImageBlock
+            v-else-if="lang === 'rus'"
+            :sourceRef="sourceRef"
+            :image="edit[lang].mainImage"
+            :file="edit[lang].mainImageFile"
+            @imageChanged="changeMainImage"
+        />
       </div>
       <div class="input-row gallery">
         <div class="input-row__label gallery__title">Галлерея картинок<br>Размер: 1000x420</div>
@@ -37,7 +61,14 @@
         <Gallery v-else-if="lang === 'rus'" :sourceRef="sourceRef" :list="edit[lang].gallery" />
       </div>
       <div class="input-row">
-        <DataTable :settings="hallsTableSettings" :list="edit.halls" :lang="lang" @addItem="addHall" @editItem="editHall" @deleteItem="deleteHall" />
+        <DataTable
+            :settings="hallsTableSettings"
+            :list="edit.halls"
+            :lang="lang"
+            @addItem="addHall"
+            @editItem="editHall"
+            @deleteItem="deleteHall"
+        />
       </div>
       <div class="seo">
         <div class="seo__title">SEO блок </div>
@@ -74,7 +105,7 @@
 import ImageBlock from './ImageBlock.vue';
 import Gallery from './Gallery.vue';
 import HallEdit from './HallEdit.vue';
-import DataTable from '@/components/DataTable.vue';
+import DataTable from '@/components/Pages/AdminPanel/DataTable.vue';
 import InfoList from '@/scripts/ListManager.js';
 
 let infoList = new InfoList();
@@ -126,13 +157,27 @@ export default {
     },
     addHall() {
       let hall = {
-        ukr: { name:"Новый зал(укр)", creationDate: this.currentDate },
-        rus: { name:"Новый зал(рус)", creationDate: this.currentDate },
+        ukr: {
+          name:"Новый зал(укр)",
+          schemaImage: "",
+          topBannerImage: "",
+          creationDate: this.currentDate
+        },
+        rus: {
+          name:"Новый зал(рус)",
+          schemaImage: "",
+          topBannerImage: "",
+          creationDate: this.currentDate
+        },
       };
 
       if(this.edit.halls.length === 0) { hall.isDeletable = false; }
 
       this.edit.halls.push(hall);
+
+      let hallsList = this.edit.halls;
+      let editingHall = hallsList[hallsList.length - 1];
+      this.editHall(editingHall);
     },
     editHall(hall) {
       this.editingHall = hall;
@@ -153,9 +198,9 @@ export default {
       this.isEditHall = false;
       this.editingHall.ukr = hall.ukr;
       this.editingHall.rus = hall.rus;
-
-      this.cinema.halls = this.edit.halls;
-      this.$emit("saveHall");
+      //
+      // this.cinema.halls = this.edit.halls;
+      // this.$emit("saveHall");
     },
     save() {
       this.$emit("saveCinema", this.edit);

@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import DatePicker from '@/components/DatePicker.vue';
+import DatePicker from '@/components/Pages/AdminPanel/DatePicker.vue';
 
 export default {
   name: "UserEdit",

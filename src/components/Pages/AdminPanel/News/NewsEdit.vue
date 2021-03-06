@@ -3,8 +3,8 @@
     <div class="card-header">
       <h3 class="card-title">Редактирование новости</h3>
       <div class="custom-control custom-switch card__enabled">
-        <input v-model="isEnabled" type="checkbox" class="custom-control-input" id="PromotionEnabled">
-        <label class="custom-control-label" for="PromotionEnabled"></label>
+        <input v-model="isEnabled" type="checkbox" class="custom-control-input" id="NewsEnabled">
+        <label class="custom-control-label" for="NewsEnabled"></label>
       </div>
       <div class="card__menu btn-group">
         <div ref="ukrLang" @click="changeLang('ukr')" class="card__item btn btn-default selected">Украинский</div>
@@ -65,11 +65,11 @@
 <script>
 import ImageBlock from './ImageBlock.vue';
 import Gallery from './Gallery.vue';
-import DatePicker from '@/components/DatePicker.vue';
+import DatePicker from '@/components/Pages/AdminPanel/DatePicker.vue';
 
 export default {
-  name: "PromotionEdit",
-  props: ["sourceRef", "promotion"],
+  name: "NewsEdit",
+  props: ["sourceRef", "news"],
   components: {
     ImageBlock,
     Gallery,
@@ -77,9 +77,9 @@ export default {
   },
   data() {
     return {
-      edit: JSON.parse(JSON.stringify(this.promotion)),
+      edit: JSON.parse(JSON.stringify(this.news)),
       lang: "ukr",
-      isEnabled: this.promotion.ukr.status === 'ВКЛ'
+      isEnabled: this.news.ukr.status === 'ВКЛ'
     }
   },
   methods: {
@@ -112,10 +112,10 @@ export default {
       this.edit['ukr'].creationDate = changed;
     },
     save() {
-      this.$emit("savePromotion", this.edit);
+      this.$emit("saveNews", this.edit);
     },
     returnDefault() {
-      this.edit = this.promotion;
+      this.edit = this.news;
     }
   },
   watch: {

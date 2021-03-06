@@ -12,6 +12,7 @@
     "firebase": "^8.2.9",
     "saas": "^1.0.0",
     "vue": "^3.0.0",
+    "vue-router": "^4.0.4",
     "vue3-datepicker": "^0.2.4"
   },
   "devDependencies": {

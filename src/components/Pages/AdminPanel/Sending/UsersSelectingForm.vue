@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import DataTable from '@/components/DataTable.vue';
+import DataTable from '@/components/Pages/AdminPanel/DataTable.vue';
 import database from '@/scripts/database.js';
 
 export default {

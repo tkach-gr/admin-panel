@@ -5,7 +5,14 @@
         <h3 class="card-title">Список текущих фильмов</h3>
       </div>
       <div class="card-body">
-        <FilmBlock :key="item" :film="item" :sourceRef="sourceRef" v-for="item in films.current" @click="$emit('editFilm', item)" class="card-block card-body__item" />
+        <FilmBlock
+            v-for="item in films.current"
+            :key="item"
+            :film="item"
+            :sourceRef="sourceRef"
+            @click="$emit('editFilm', item)"
+            class="card-block card-body__item"
+        />
         <button @click="$emit('addFilm', 'current')" class="btn btn-default card__add-block card-body__item">
           Добавить<br>фильм
         </button>
@@ -19,7 +26,14 @@
         <h3 class="card-title">Список будущих релизов</h3>
       </div>
       <div class="card-body">
-        <FilmBlock :key="item" :film="item" :sourceRef="sourceRef" v-for="item in films.soon" @click="$emit('editFilm', item)" class="card-block card-body__item" />
+        <FilmBlock
+            v-for="item in films.soon"
+            :key="item"
+            :film="item"
+            :sourceRef="sourceRef"
+            @click="$emit('editFilm', item)"
+            class="card-block card-body__item"
+        />
         <button @click="$emit('addFilm', 'soon')" class="btn btn-default card__add-block card-body__item">
           Добавить<br>фильм
         </button>

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import DataTable from '@/components/DataTable.vue';
+import DataTable from '@/components/Pages/AdminPanel/DataTable.vue';
 import MainPageEdit from './MainPageEdit.vue';
 import ContactsPageEdit from "./ContactsPageEdit";
 import CommonPageEdit from './CommonPageEdit.vue';
@@ -83,7 +83,9 @@ export default {
       this.pages.list = this.pages.list || [];
       this.pages.list.push(page);
 
-      this.save();
+      let pages = this.pages.list;
+      let lastPage = pages[pages.length - 1];
+      this.editPage(lastPage);
     },
     editPage(page) {
       this.editingPage = page;

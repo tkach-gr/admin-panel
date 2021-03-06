@@ -1,7 +1,20 @@
 <template>
   <div class="films">
-    <FilmsList ref="filmsList" v-if="!isEditing" :films="films" :isLoading="isLoading" :sourceRef="ref" @addFilm="addFilm" @editFilm="editFilm" />
-    <FilmEdit v-else-if="isEditing" :film="editingFilm" :sourceRef="ref" @saveFilm="saveFilm" />
+    <FilmsList
+        ref="filmsList"
+        v-if="!isEditing"
+        :films="films"
+        :isLoading="isLoading"
+        :sourceRef="ref"
+        @addFilm="addFilm"
+        @editFilm="editFilm"
+    />
+    <FilmEdit
+        v-else-if="isEditing"
+        :film="editingFilm"
+        :sourceRef="ref"
+        @saveFilm="saveFilm"
+    />
   </div>
 </template>
 
@@ -40,18 +53,20 @@ export default {
       this.films.soon = this.films.soon || [];
       this.films[category].push(film);
 
-      this.save();
+      let films = this.films[category];
+      let currentFilm = films[films.length - 1];
+      this.editFilm(currentFilm);
     },
     editFilm(film) {
       this.editingFilm = film;
       this.isEditing = true;
     },
     saveFilm(film) {
+      console.log(this.films.current[this.films.current.length - 1] === this.editingFilm);
       this.editingFilm.ukr = film.ukr;
       this.editingFilm.rus = film.rus;
 
       this.isEditing = false;
-
       this.save();
     },
     pushMainImages(array) {

@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import DataTable from '@/components/DataTable.vue';
+import DataTable from '@/components/Pages/AdminPanel/DataTable.vue';
 import UserEdit from './UserEdit.vue';
 import database from '@/scripts/database.js';
 import DataUpdater from '@/scripts/DataUpdater.js';
@@ -86,7 +86,9 @@ export default {
       this.users.list = this.users.list || [];
       this.users.list.push(user);
 
-      this.save();
+      let users = this.users.list;
+      let lastUser = users[users.length - 1];
+      this.editUser(lastUser);
     },
     editUser(user) {
       this.editingUser = user;
