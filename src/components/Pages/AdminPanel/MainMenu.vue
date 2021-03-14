@@ -103,6 +103,7 @@ export default {
 <style lang="scss" scoped>
   .main-sidebar {
     position: fixed !important;
+    text-align: center;
   }
 
   .nav-link {

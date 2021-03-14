@@ -1,17 +1,19 @@
 <template>
-  <Header/>
-  <MainMenu @pagechanged="changePage"/>
-  <div class="content-wrapper px-4 py-2">
-    <Statistics class="page" v-if="currentPage === 'statistics'" />
-    <BannersAndSliders class="page" v-else-if="currentPage === 'banners-sliders'" />
-    <Films class="page" v-else-if="currentPage === 'films'" />
-    <Cinemas class="page" v-else-if="currentPage === 'cinemas'" />
-    <News class="page" v-else-if="currentPage === 'news'" />
-    <Promotions class="page" v-else-if="currentPage === 'promotions'" />
-    <UsersPages class="page" v-else-if="currentPage === 'pages'" />
-    <Users class="page" v-else-if="currentPage === 'users'" />
-    <Sending class="page" v-else-if="currentPage === 'sending'" />
-  </div>
+  <template v-if="authInfo !== null">
+    <Header :authInfo="authInfo"/>
+    <MainMenu @pagechanged="changePage"/>
+    <div class="content-wrapper px-4 py-2">
+      <Statistics class="page" v-if="currentPage === 'statistics'" />
+      <BannersAndSliders class="page" v-else-if="currentPage === 'banners-sliders'" />
+      <Films class="page" v-else-if="currentPage === 'films'" />
+      <Cinemas class="page" v-else-if="currentPage === 'cinemas'" />
+      <News class="page" v-else-if="currentPage === 'news'" />
+      <Promotions class="page" v-else-if="currentPage === 'promotions'" />
+      <UsersPages class="page" v-else-if="currentPage === 'pages'" />
+      <Users class="page" v-else-if="currentPage === 'users'" />
+      <Sending class="page" v-else-if="currentPage === 'sending'" />
+    </div>
+  </template>
 </template>
 
 <script>
@@ -26,19 +28,11 @@ import Promotions from './Promotions/Promotions.vue';
 import UsersPages from './UsersPages/UsersPages.vue';
 import Users from './Users/Users.vue';
 import Sending from './Sending/Sending.vue';
+import database from "@/scripts/database";
+import { computed } from "vue";
 
 export default {
   name: 'AdminPanel',
-  data() {
-    return {
-      currentPage: 'statistics',
-    }
-  },
-  methods: {
-    changePage(pageName) {
-      this.currentPage = pageName
-    }
-  },
   components: {
     Header,
     MainMenu,
@@ -51,11 +45,43 @@ export default {
     UsersPages,
     Users,
     Sending
+  },
+  data() {
+    return {
+      currentPage: 'statistics',
+      authInfo: null
+    }
+  },
+  methods: {
+    changePage(pageName) {
+      this.currentPage = pageName
+    },
+    login() {
+      let mail = "admin@adminpanel.com";
+      let pass = "123321";
+
+      database.auth(mail, pass,
+          (userCredential) => {
+            this.authInfo = userCredential;
+          },
+          (err) => {
+            this.authInfo = null;
+            this.$router.replace("/");
+          });
+    }
+  },
+  watch: {
+    authInfo(newValue) {
+      console.log(newValue);
+    }
+  },
+  mounted() {
+    this.login();
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content-wrapper {
   min-height: calc(100% - 57px);
   height: 1px;

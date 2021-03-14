@@ -1,8 +1,16 @@
 @import '~admin-lte/build/scss/AdminLTE.scss';
 
+* {
+  outline: none;
+}
+
 html, body, .wrapper, .sidebar {
   height: 100%;
   min-height: 100%;
+}
+
+#app {
+  height: 100%;
 }
 
 .main-header {
@@ -11,6 +19,12 @@ html, body, .wrapper, .sidebar {
 
 .content-wrapper {
   margin-left: 250px !important;
+}
+
+.page-container {
+  flex-grow: 1;
+  justify-content: center;
+  display: flex;
 }
 
 @media screen and (max-width: 769px) {

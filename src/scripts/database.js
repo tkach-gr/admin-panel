@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import "firebase/auth";
 import 'firebase/database';
 import 'firebase/storage';
 
@@ -16,6 +17,17 @@ let firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 class Database {
+  auth(mail, pass, fulfilled, rejected) {
+    return firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          firebase.auth().signInWithEmailAndPassword(mail, pass)
+              .then(fulfilled, rejected);
+        })
+        .catch(rejected);
+  }
+
   writeData(ref, data) {
     firebase.database().ref(ref).set(data);
   }
