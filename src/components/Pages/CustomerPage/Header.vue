@@ -48,7 +48,15 @@
           <RouterLink to="/future" class="menu__item">Скоро</RouterLink>
           <RouterLink to="/cinemas" class="menu__item">Кинотеатры</RouterLink>
           <RouterLink to="/promotions" class="menu__item">Акции</RouterLink>
-          <div class="menu__item">О кинотеатре</div>
+          <div class="submenu menu__item">
+            <RouterLink to="/about" class="submenu__item">О кинотеатре</RouterLink>
+            <div class="submenu__inner">
+              <RouterLink to="/news" class="submenu__item">Новости</RouterLink>
+              <RouterLink to="#" class="submenu__item">Реклама</RouterLink>
+              <RouterLink to="#" class="submenu__item">Кафе</RouterLink>
+              <RouterLink to="#" class="submenu__item">Контакты</RouterLink>
+            </div>
+          </div>
         </div>
         <div class="languages">
           <select
@@ -176,9 +184,6 @@ export default {
 .menu {
   flex-grow: 1;
   display: flex;
-  border: #454545 1px solid;
-  border-radius: 0.25rem;
-  overflow: hidden;
 }
 
 .menu__item {
@@ -189,17 +194,82 @@ export default {
   text-align: center;
   color: black;
   background-color: white;
-  border-left: #454545 1px solid;
+  border-top: #454545 1px solid;
+  border-right: #454545 1px solid;
+  border-bottom: #454545 1px solid;
   padding: 5px 13px;
   transition: background-color 0.3s ease;
 }
 
 .menu__item:first-child {
-  border-left: none;
+  border-left: #454545 1px solid;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.menu__item:last-child {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
 }
 
 .menu__item:hover {
   background-color: #dedede;
+}
+
+.submenu {
+  position: relative;
+}
+
+.submenu:hover {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.submenu__item {
+  color: black;
+}
+
+.submenu__inner {
+  display: flex;
+  visibility: hidden;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  right: -1px;
+  width: calc(100% + 2px);
+  border: #454545 1px solid;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  opacity: 0;
+  z-index: 10;
+  transition:
+      visibility 0.4s ease,
+      opacity 0.4s ease;
+}
+
+.submenu:hover > .submenu__inner {
+  visibility: visible;
+  opacity: 1;
+}
+
+.submenu__inner .submenu__item {
+  background-color: white;
+  border-top: #454545 1px solid;
+  padding: 5px 13px;
+  transition: background-color 0.3s ease;
+}
+
+.submenu__inner .submenu__item:hover {
+  background-color: #dedede;
+}
+
+.submenu__inner .submenu__item:first-child {
+  border-top: none;
+}
+
+.submenu__inner .submenu__item:last-child {
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
 }
 
 .languages {
