@@ -6,6 +6,8 @@ import CustomerSoon from '../components/Pages/CustomerPage/Soon/Index.vue';
 import CustomerCinemas from '../components/Pages/CustomerPage/Cinemas/Index.vue';
 import CustomerCinema from '../components/Pages/CustomerPage/Cinema/Index.vue';
 import CustomerHall from '../components/Pages/CustomerPage/Hall/Index.vue';
+import CustomerPromotions from '../components/Pages/CustomerPage/Promotions/Index.vue';
+import CustomerPromotion from '../components/Pages/CustomerPage/Promotion/Index.vue';
 import CustomerAccount from '../components/Pages/CustomerPage/Account/Index.vue';
 import CustomerFilm from '../components/Pages/CustomerPage/Film/Index.vue';
 
@@ -38,6 +40,14 @@ const routes = [
       {
         path: "cinemas/:cinemaName/:hallName",
         component: CustomerHall,
+      },
+      {
+        path: "promotions",
+        component: CustomerPromotions
+      },
+      {
+        path: "promotions/:seoUrl",
+        component: CustomerPromotion
       },
       {
         path: "/account",

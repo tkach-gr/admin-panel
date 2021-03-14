@@ -47,7 +47,7 @@
           <div class="menu__item">Расписание</div>
           <RouterLink to="/future" class="menu__item">Скоро</RouterLink>
           <RouterLink to="/cinemas" class="menu__item">Кинотеатры</RouterLink>
-          <div class="menu__item">Акции</div>
+          <RouterLink to="/promotions" class="menu__item">Акции</RouterLink>
           <div class="menu__item">О кинотеатре</div>
         </div>
         <div class="languages">

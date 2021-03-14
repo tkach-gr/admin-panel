@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import database from "@/scripts/database";
 
 let isRequestedCinemas = false;
+let isRequestedPromotions = false;
 
 const store = createStore({
     state () {
@@ -20,12 +21,12 @@ const store = createStore({
             return state.cinemas;
         },
         getPromotions: state => url => {
-            if(isRequestedCinemas !== true) {
-                database.listenData(url, value => state.cinemas = value);
-                isRequestedCinemas = true;
+            if(isRequestedPromotions !== true) {
+                database.listenData(url, value => state.promotions = value);
+                isRequestedPromotions = true;
             }
 
-            return state.cinemas;
+            return state.promotions;
         }
     }
 });
