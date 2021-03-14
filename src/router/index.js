@@ -8,6 +8,7 @@ import CustomerCinema from '../components/Pages/CustomerPage/Cinema/Index.vue';
 import CustomerHall from '../components/Pages/CustomerPage/Hall/Index.vue';
 import CustomerPromotions from '../components/Pages/CustomerPage/Promotions/Index.vue';
 import CustomerPromotion from '../components/Pages/CustomerPage/Promotion/Index.vue';
+import CustomerNews from '../components/Pages/CustomerPage/News/Index.vue';
 import CustomerAccount from '../components/Pages/CustomerPage/Account/Index.vue';
 import CustomerFilm from '../components/Pages/CustomerPage/Film/Index.vue';
 
@@ -48,6 +49,10 @@ const routes = [
       {
         path: "promotions/:seoUrl",
         component: CustomerPromotion
+      },
+      {
+        path: "news",
+        component: CustomerNews
       },
       {
         path: "/account",

@@ -3,12 +3,14 @@ import database from "@/scripts/database";
 
 let isRequestedCinemas = false;
 let isRequestedPromotions = false;
+let isRequestedNews = false;
 
 const store = createStore({
     state () {
         return {
             cinemas: null,
             promotions: null,
+            news: null
         }
     },
     getters: {
@@ -27,6 +29,14 @@ const store = createStore({
             }
 
             return state.promotions;
+        },
+        getNews: state => url => {
+            if(isRequestedNews !== true) {
+                database.listenData(url, value => state.news = value);
+                isRequestedNews = true;
+            }
+
+            return state.news;
         }
     }
 });
