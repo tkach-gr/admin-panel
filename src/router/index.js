@@ -9,6 +9,8 @@ import CustomerHall from '../components/Pages/CustomerPage/Hall/Index.vue';
 import CustomerPromotions from '../components/Pages/CustomerPage/Promotions/Index.vue';
 import CustomerPromotion from '../components/Pages/CustomerPage/Promotion/Index.vue';
 import CustomerNews from '../components/Pages/CustomerPage/News/Index.vue';
+import CustomerContacts from '../components/Pages/CustomerPage/Contacts/Index.vue';
+import CustomerCommonPage from '../components/Pages/CustomerPage/Common/Index.vue';
 import CustomerAccount from '../components/Pages/CustomerPage/Account/Index.vue';
 import CustomerFilm from '../components/Pages/CustomerPage/Film/Index.vue';
 
@@ -53,6 +55,14 @@ const routes = [
       {
         path: "news",
         component: CustomerNews
+      },
+      {
+        path: "contacts",
+        component: CustomerContacts
+      },
+      {
+        path: "common/:seoUrl",
+        component: CustomerCommonPage
       },
       {
         path: "/account",

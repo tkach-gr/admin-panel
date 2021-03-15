@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <Account :mail="mail" @logout="logout" />
-    <Header :lang="lang" @changeLang="changeLang" />
+    <Header :pages="pages" :lang="lang" @changeLang="changeLang" />
     <RouterView :films="films" :pages="pages" :lang="lang" />
     <Footer class="footer" />
   </div>

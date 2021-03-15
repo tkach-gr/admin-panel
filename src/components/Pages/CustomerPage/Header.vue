@@ -49,12 +49,20 @@
           <RouterLink to="/cinemas" class="menu__item">Кинотеатры</RouterLink>
           <RouterLink to="/promotions" class="menu__item">Акции</RouterLink>
           <div class="submenu menu__item">
-            <RouterLink to="/about" class="submenu__item">О кинотеатре</RouterLink>
+            <RouterLink to="/common/about" class="submenu__item">О кинотеатре</RouterLink>
             <div class="submenu__inner">
               <RouterLink to="/news" class="submenu__item">Новости</RouterLink>
-              <RouterLink to="#" class="submenu__item">Реклама</RouterLink>
-              <RouterLink to="#" class="submenu__item">Кафе</RouterLink>
-              <RouterLink to="#" class="submenu__item">Контакты</RouterLink>
+              <RouterLink to="/common/advertising" class="submenu__item">Реклама</RouterLink>
+              <RouterLink to="/common/cafe" class="submenu__item">Кафе</RouterLink>
+              <RouterLink to="/common/vip" class="submenu__item">Vip-зал</RouterLink>
+              <RouterLink to="/common/children" class="submenu__item">Детская комната</RouterLink>
+              <RouterLink to="/contacts" class="submenu__item">Контакты</RouterLink>
+              <RouterLink
+                  v-for="(item, index) in additionalPages"
+                  :key="index"
+                  :to="`/common/${item.ukr.seoUrl}`"
+                  class="submenu__item"
+              >{{ item[lang].name }}</RouterLink>
             </div>
           </div>
         </div>
@@ -76,7 +84,7 @@
 <script>
 export default {
   name: "Header",
-  props: ["lang"],
+  props: ["lang", "pages"],
   data() {
     return {
       innerLang: this.lang,
@@ -89,6 +97,19 @@ export default {
         this.$router.push(`/films/any/${this.searchedFilm}`);
       }
     },
+  },
+  computed: {
+    additionalPages() {
+      if(this.pages === null) return [];
+
+      return this.pages.list.filter((item, index) => {
+        if(index >= 7 && item.ukr.status === "ВКЛ") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
   }
 }
 </script>
