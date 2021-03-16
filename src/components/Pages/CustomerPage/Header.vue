@@ -44,7 +44,7 @@
       <div class="header__bottom">
         <div class="menu">
           <RouterLink to="/poster" class="menu__item">Афиша</RouterLink>
-          <div class="menu__item">Расписание</div>
+          <RouterLink to="tickets" class="menu__item">Расписание</RouterLink>
           <RouterLink to="/future" class="menu__item">Скоро</RouterLink>
           <RouterLink to="/cinemas" class="menu__item">Кинотеатры</RouterLink>
           <RouterLink to="/promotions" class="menu__item">Акции</RouterLink>
@@ -52,17 +52,13 @@
             <RouterLink to="/common/about" class="submenu__item">О кинотеатре</RouterLink>
             <div class="submenu__inner">
               <RouterLink to="/news" class="submenu__item">Новости</RouterLink>
-              <RouterLink to="/common/advertising" class="submenu__item">Реклама</RouterLink>
-              <RouterLink to="/common/cafe" class="submenu__item">Кафе</RouterLink>
-              <RouterLink to="/common/vip" class="submenu__item">Vip-зал</RouterLink>
-              <RouterLink to="/common/children" class="submenu__item">Детская комната</RouterLink>
-              <RouterLink to="/contacts" class="submenu__item">Контакты</RouterLink>
               <RouterLink
                   v-for="(item, index) in additionalPages"
                   :key="index"
                   :to="`/common/${item.ukr.seoUrl}`"
                   class="submenu__item"
               >{{ item[lang].name }}</RouterLink>
+              <RouterLink to="/contacts" class="submenu__item">Контакты</RouterLink>
             </div>
           </div>
         </div>
@@ -103,7 +99,10 @@ export default {
       if(this.pages === null) return [];
 
       return this.pages.list.filter((item, index) => {
-        if(index >= 7 && item.ukr.status === "ВКЛ") {
+        if(item.ukr.status === "ВКЛ" &&
+            item.ukr.page === "common" &&
+            item.ukr.name !== "О кинотеатре") {
+
           return true;
         } else {
           return false;

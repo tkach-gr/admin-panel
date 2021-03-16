@@ -7,6 +7,7 @@
       <BannersAndSliders class="page" v-else-if="currentPage === 'banners-sliders'" />
       <Films class="page" v-else-if="currentPage === 'films'" />
       <Cinemas class="page" v-else-if="currentPage === 'cinemas'" />
+      <Tickets class="page" v-else-if="currentPage === 'tickets'" />
       <News class="page" v-else-if="currentPage === 'news'" />
       <Promotions class="page" v-else-if="currentPage === 'promotions'" />
       <UsersPages class="page" v-else-if="currentPage === 'pages'" />
@@ -23,13 +24,13 @@ import Statistics from './Statistics.vue';
 import BannersAndSliders from './BannersAndSliders/BannersAndSliders.vue';
 import Films from './Films/Films.vue';
 import Cinemas from './Cinemas/Cinemas.vue';
+import Tickets from './Tickets/Tickets.vue';
 import News from './News/News.vue';
 import Promotions from './Promotions/Promotions.vue';
 import UsersPages from './UsersPages/UsersPages.vue';
 import Users from './Users/Users.vue';
 import Sending from './Sending/Sending.vue';
 import database from "@/scripts/database";
-import { computed } from "vue";
 
 export default {
   name: 'AdminPanel',
@@ -40,6 +41,7 @@ export default {
     BannersAndSliders,
     Films,
     Cinemas,
+    Tickets,
     News,
     Promotions,
     UsersPages,

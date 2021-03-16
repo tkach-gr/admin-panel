@@ -16,17 +16,17 @@
         </div>
         <div class="column">
           <RouterLink to="/poster" class="column__title">Афиша</RouterLink>
-          <RouterLink to="#" class="column__text">Расписание</RouterLink>
+          <RouterLink to="/tickets" class="column__text">Расписание</RouterLink>
           <RouterLink to="/future" class="column__text">Скоро в прокате</RouterLink>
-          <RouterLink to="/future" class="column__text">Кинотеатры</RouterLink>
-          <RouterLink to="/future" class="column__text">Акции</RouterLink>
+          <RouterLink to="/cinemas" class="column__text">Кинотеатры</RouterLink>
+          <RouterLink to="/promotions" class="column__text">Акции</RouterLink>
         </div>
         <div class="column">
-          <RouterLink to="#" class="column__title">О кинотеатре</RouterLink>
-          <RouterLink to="#" class="column__text">Новости</RouterLink>
-          <RouterLink to="#" class="column__text">Реклама</RouterLink>
-          <RouterLink to="#" class="column__text">Кафе-Бар</RouterLink>
-          <RouterLink to="#" class="column__text">Контакты</RouterLink>
+          <RouterLink to="/common/about" class="column__title">О кинотеатре</RouterLink>
+          <RouterLink to="/news" class="column__text">Новости</RouterLink>
+          <RouterLink to="/common/advertising" class="column__text">Реклама</RouterLink>
+          <RouterLink to="/common/cafe" class="column__text">Кафе-Бар</RouterLink>
+          <RouterLink to="/contacts" class="column__text">Контакты</RouterLink>
         </div>
         <div class="column">
           <div class="socials">

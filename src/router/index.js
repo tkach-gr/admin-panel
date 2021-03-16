@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import CustomerPage from '../components/Pages/CustomerPage/Index.vue';
 import CustomerMain from '../components/Pages/CustomerPage/Main/Index.vue';
 import CustomerPoster from '../components/Pages/CustomerPage/Poster/Index.vue';
+import CustomerTickets from '../components/Pages/CustomerPage/Tickets/Index.vue';
 import CustomerSoon from '../components/Pages/CustomerPage/Soon/Index.vue';
 import CustomerCinemas from '../components/Pages/CustomerPage/Cinemas/Index.vue';
 import CustomerCinema from '../components/Pages/CustomerPage/Cinema/Index.vue';
@@ -27,6 +28,10 @@ const routes = [
       {
         path: "poster",
         component: CustomerPoster
+      },
+      {
+        path: "tickets",
+        component: CustomerTickets
       },
       {
         path: "future",

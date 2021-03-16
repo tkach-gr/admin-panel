@@ -62,7 +62,6 @@ export default {
       this.isEditing = true;
     },
     saveFilm(film) {
-      console.log(this.films.current[this.films.current.length - 1] === this.editingFilm);
       this.editingFilm.ukr = film.ukr;
       this.editingFilm.rus = film.rus;
 

@@ -4,13 +4,15 @@ import database from "@/scripts/database";
 let isRequestedCinemas = false;
 let isRequestedPromotions = false;
 let isRequestedNews = false;
+let isRequestedTickets = false;
 
 const store = createStore({
     state () {
         return {
             cinemas: null,
             promotions: null,
-            news: null
+            news: null,
+            tickets: null
         }
     },
     getters: {
@@ -37,6 +39,14 @@ const store = createStore({
             }
 
             return state.news;
+        },
+        getTickets: state => url => {
+            if(isRequestedTickets !== true) {
+                database.listenData(url, value => state.tickets = value);
+                isRequestedTickets = true;
+            }
+
+            return state.tickets;
         }
     }
 });

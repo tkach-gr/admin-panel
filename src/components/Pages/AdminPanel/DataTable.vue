@@ -36,7 +36,7 @@
               >
             </td>
             <td :key="key" v-for="(prop, key) in settings.props" class="table__cell table__data">
-              {{ item[lang][key] }}
+              {{ getContent(item)[key] }}
             </td>
             <td v-if="settings.hasEdit && item.isEditable !== false" class="data__btn">
               <button @click="$emit('editItem', item)" class="btn btn-default">Редактировать</button>
@@ -69,6 +69,10 @@ export default {
       } else {
         this.selectedItems.add(item);
       }
+    },
+    getContent(item) {
+      if(this.lang !== null) return item.ukr;
+      return item;
     }
   }
 }

@@ -5,7 +5,7 @@
         <div class="list__title">Акции и скидки</div>
         <div class="list__container">
           <RouterLink
-              v-for="(item, index) in promotions?.list"
+              v-for="(item, index) in getEnabledPromotions"
               :key="index"
               :to="`/promotions/${item.ukr.seoUrl}`"
           >
@@ -40,6 +40,19 @@ export default {
   computed: {
     promotions() {
       return this.$store.getters.getPromotions(this.sourceRef);
+    },
+    getEnabledPromotions() {
+      let promotions = this.promotions;
+
+      if(promotions === null || promotions.list === null) return [];
+
+      return promotions.list.filter(item => {
+        if(item.ukr.status === "ВКЛ") {
+          return true;
+        }
+
+        return false;
+      });
     }
   },
 }

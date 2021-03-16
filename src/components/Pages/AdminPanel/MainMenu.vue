@@ -34,6 +34,13 @@
             </div>
           </li>
           <li class="nav-item">
+            <div ref="tickets" @click="changePage('tickets')" class="nav-link">
+              <p>
+                Расписание
+              </p>
+            </div>
+          </li>
+          <li class="nav-item">
             <div ref="news" @click="changePage('news')" class="nav-link">
               <p>
                 Новости

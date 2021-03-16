@@ -5,7 +5,7 @@
         <div class="list__title">Новости</div>
         <div class="list__container">
           <ItemCard
-              v-for="(item, index) in news?.list"
+              v-for="(item, index) in getEnabledNews"
               :key="index"
               :item="item"
               :lang="lang"
@@ -34,6 +34,19 @@ export default {
   computed: {
     news() {
       return this.$store.getters.getNews(this.sourceRef);
+    },
+    getEnabledNews() {
+      let news = this.news;
+
+      if(news === null || news.list === null) return [];
+
+      return news.list.filter(item => {
+        if(item.ukr.status === "ВКЛ") {
+          return true;
+        }
+
+        return false;
+      });
     }
   },
 }
